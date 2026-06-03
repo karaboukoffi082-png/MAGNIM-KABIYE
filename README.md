@@ -1,89 +1,103 @@
-# KabiyèBooks
+# KabiyèBooks 📚
 
-Specialized online bookstore for Kabiyè, Togolese, and African physical books — built with Django 5 + Python.
+Librairie en ligne spécialisée dans les ouvrages physiques en langue Kabiyè, togolais et africains. Propulsé par **Django 5/6 + Python**.
 
-## Run & Operate
+---
 
-- `cd kabiye-books && python manage.py runserver 0.0.0.0:8000 --noreload` — dev server
-- `cd kabiye-books && gunicorn kabiye_books.wsgi:application --bind 0.0.0.0:8000 --workers 2` — production server (used by workflow)
-- `cd kabiye-books && python manage.py migrate` — apply DB migrations
-- `cd kabiye-books && python manage.py makemigrations` — create new migrations
-- `cd kabiye-books && python manage.py collectstatic --noinput` — collect static files
-- `cd kabiye-books && python manage.py createsuperuser` — create an admin user
+## 🛠️ Stack Technique
 
-## Stack
+- **Backend** : Python 3.11+ / Django 6.0
+- **Base de données** : PostgreSQL (Production via `psycopg2-binary`) / SQLite (Repli développement)
+- **Fichiers Statiques** : Whitenoise (Servis de manière autonome avec compression & cache agressif)
+- **Fichiers Médias** : Cloudinary (Stockage cloud persistant) / Système de fichiers local (Repli développement)
+- **Interface** : Bootstrap 5.3 + Bootstrap Icons (via CDN pour un rendu rapide)
+- **Formulaires** : django-crispy-forms + crispy-bootstrap5
+- **Serveur WSGI** : Gunicorn (Production)
 
-- Python 3.11 + Django 5.2
-- Django REST Framework (DRF)
-- SQLite (dev) / PostgreSQL (prod via psycopg2-binary)
-- Bootstrap 5.3 + Bootstrap Icons (CDN)
-- django-crispy-forms + crispy-bootstrap5
-- Whitenoise (static file serving)
-- Gunicorn (WSGI server)
-- Pillow (image handling)
+---
 
-## Where things live
+## 🚀 Lancement en Local (Développement & Tests)
 
-- `kabiye-books/` — Django project root
-- `kabiye-books/kabiye_books/` — project settings/urls/wsgi
-- `kabiye-books/kabiye_books/settings.py` — main settings (AUTH_USER_MODEL, INSTALLED_APPS, etc.)
-- `kabiye-books/kabiye_books/urls.py` — root URL routing
-- `kabiye-books/templates/` — all HTML templates
-- `kabiye-books/static/` — CSS (`style.css`) + JS (`main.js`)
-- `kabiye-books/staticfiles/` — collected static files (auto-generated)
-- `kabiye-books/db.sqlite3` — SQLite dev database
-- `kabiye-books/requirements.txt` — Python dependencies
-- `kabiye-books/media/` — user-uploaded files (book covers, etc.)
+### 1. Prérequis et Installation
+Clonez le projet et créez votre environnement virtuel Python :
+```bash
+# Créer l'environnement virtuel
+python -m venv venv
 
-## Apps
+# Activer l'environnement virtuel
+# Sur Windows (PowerShell) :
+venv\Scripts\Activate.ps1
+# Sur Linux/macOS :
+source venv/bin/activate
 
-| App | Purpose | URL prefix |
-|-----|---------|-----------|
-| `main` | Home, about, contact, promotions, admin dashboard | `/`, `/admin-dashboard/` |
-| `gestion_utilisateurs` | Custom User model, auth, dashboard | `/utilisateurs/` |
-| `gestion_livres` | Books, reviews, favorites | `/livres/` |
-| `gestion_categories` | Book categories | `/categories/` |
-| `gestion_commandes` | Orders | `/commandes/` |
-| `gestion_paiements` | Payments | `/paiements/` |
-| `gestion_livraisons` | Deliveries | `/livraisons/` |
-| `gestion_notifications` | Notifications | (internal) |
-| `panier` | Shopping cart | `/panier/` |
+# Installer les dépendances
+pip install -r requirements.txt
+```
 
-## Admin
+### 2. Base de données et Fichiers Statiques
+Le projet est configuré pour basculer automatiquement sur une base SQLite locale et le stockage de fichiers local si aucune variable de production (PostgreSQL/Cloudinary) n'est définie dans votre fichier `.env`.
 
-- Django admin: `/admin/` — login with `admin` / `admin1234`
-- Custom admin dashboard: `/admin-dashboard/`
+```bash
+# Appliquer les migrations de base de données
+python manage.py migrate
 
-## Architecture decisions
+# Créer un compte administrateur
+python manage.py createsuperuser
 
-- Custom User model (`gestion_utilisateurs.Utilisateur`) extending `AbstractUser` — allows adding fields (phone, city, profile photo, is_admin_boutique flag)
-- Cart stored in Django session (no login required to browse) via `panier` context processor
-- Bootstrap 5.3 loaded from CDN (no npm/build step needed)
-- Whitenoise serves static files directly (no Nginx needed in development or simple deployments)
-- Gunicorn runs in production mode for the Replit workflow
+# Collecter les fichiers statiques
+python manage.py collectstatic --noinput
+```
 
-## Product
+### 3. Exécuter les serveurs & Tests
+```bash
+# Lancer le serveur de développement local
+python manage.py runserver
 
-- Browse books by category (Kabiyè, Togolais, Africain, Scolaire, Romans, etc.)
-- Book detail pages with reviews and favoriting
-- Shopping cart and checkout flow
-- User accounts with order history and profile management
-- Payment and delivery tracking
-- Promotions/deals page
-- Admin dashboard for managing books, orders, users
+# Lancer la suite de tests unitaires
+python manage.py test
+```
 
-## User preferences
+---
 
-- Django + Python stack only (no Node.js/React)
-- Bootstrap/Tailwind for styling (Bootstrap 5 chosen)
-- SQLite for development, PostgreSQL-ready for production
-- African-themed design: green/gold/brown palette, Playfair Display + Inter fonts
+## 🐋 Lancement en Production avec Docker
 
-## Gotchas
+L'application intègre un environnement de conteneurisation complet optimisé pour la production.
 
-- Run `makemigrations <app_name>` explicitly for each app when creating models (auto-detection may miss apps)
-- Slug fields must use ASCII-only characters — use Django's `slugify()` (non-unicode) to avoid URL pattern mismatches
-- `AUTH_USER_MODEL = "gestion_utilisateurs.Utilisateur"` is set — always use `get_user_model()` not `User` directly
-- `collectstatic` must be run after changing static files when using Whitenoise
-- The Django workflow uses Gunicorn (not `runserver`) for reliability in the Replit environment
-- Cart context processor (`panier.context_processors.panier_count`) is added to TEMPLATES settings so cart count appears in navbar everywhere
+```bash
+# Construire et démarrer l'application avec docker-compose
+docker compose up -d --build
+```
+Le conteneur `web-app` va automatiquement exécuter le script [docker-entrypoint.sh](file:///P:/PROJETS/ProjetsDev/COLLABORATION/KARABOU/MAGNIM-KABIYE/docker-entrypoint.sh) pour appliquer les migrations, collecter les fichiers statiques et lancer le serveur de production Gunicorn sur le port `8000`.
+
+---
+
+## 🌐 Déploiement sur Dokploy
+
+Le projet est configuré pour être déployé en un clic sur **Dokploy** (alternative auto-hébergée à Heroku et Coolify).
+Consultez le guide de déploiement détaillé étape par étape dans le fichier [DEPLOYMENT.md](file:///P:/PROJETS/ProjetsDev/COLLABORATION/KARABOU/MAGNIM-KABIYE/DEPLOYMENT.md).
+
+---
+
+## 📁 Structure du Projet
+
+L'application est découpée en applications Django modulaires :
+
+| Application | Description | Préfixe URL |
+|---|---|---|
+| `main` | Accueil, à propos, contact, promotions & tableau de bord admin personnalisé | `/`, `/admin-dashboard/` |
+| `gestion_utilisateurs` | Modèle utilisateur personnalisé (`Utilisateur`), authentification & profils | `/utilisateurs/` |
+| `gestion_livres` | Catalogue de livres physiques, avis des lecteurs et favoris | `/livres/` |
+| `gestion_categories` | Taxonomie et catégories des livres (Kabiyè, Scolaire, Romans, etc.) | `/categories/` |
+| `gestion_commandes` | Gestion du panier d'achat persistant et validation de commandes | `/commandes/` |
+| `gestion_paiements` | Intégration des APIs de paiement (BKAPAY, Cashpay/Semoa) | `/paiements/` |
+| `gestion_livraisons` | Suivi et gestion de l'état des livraisons physiques | `/livraisons/` |
+| `gestion_notifications` | Système d'envoi interne et logs de SMS/Mails de notifications | *(Interne)* |
+| `panier` | Gestion du panier utilisateur stocké en session (sans connexion requise) | `/panier/` |
+
+---
+
+## 🛡️ Décisions d'Architecture & Sécurité
+
+- **Modèle Utilisateur Étendu** : Utilisation de `gestion_utilisateurs.Utilisateur` étendant `AbstractUser` pour intégrer des champs spécifiques (téléphone, ville, photo, flags administrateur) dès la création du projet.
+- **Ressources Statiques Isolées** : Exclusion complète des bibliothèques locales d'actifs statiques du dépôt Git grâce à une configuration rigoureuse du [.gitignore](file:///P:/PROJETS/ProjetsDev/COLLABORATION/KARABOU/MAGNIM-KABIYE/.gitignore) et du [.dockerignore](file:///P:/PROJETS/ProjetsDev/COLLABORATION/KARABOU/MAGNIM-KABIYE/.dockerignore).
+- **Routage SSL & CSRF** : Intégration de `SECURE_PROXY_SSL_HEADER` pour éviter les boucles de redirection HTTPS infinies sur les proxys comme Traefik ou Nginx.
