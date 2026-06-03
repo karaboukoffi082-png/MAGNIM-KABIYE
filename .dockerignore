@@ -1,8 +1,41 @@
-.env
-env/
-venv/
-.venv
-__pycache__/
+# Exclude Git files
 .git
 .gitignore
+.dockerignore
 
+# Exclude documentation
+DEPLOYMENT.md
+README.md
+
+# Exclude environment and credentials files
+.env
+.env.*
+
+# Exclude python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Exclude virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Exclude local database and static/media files
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+
+# Exclude IDE configurations
+.vscode/
+.idea/
+
+# Exclude Replit files
+.replit
+.replit-artifact/
+
+# Exclude custom directories
+LDPlayer9/
+ldmutiplayer/

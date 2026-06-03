@@ -124,17 +124,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
-# --- BASE DE DONNÉES (PostgreSQL) ---
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env('DB_NAME'),
-        "USER": env('DB_USER'),
-        "PASSWORD": env('DB_PASSWORD'),
-        "HOST": env('DB_HOST'),
-        "PORT": env('DB_PORT'),
+# --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
+if env('DATABASE_URL', default=''):
+    DATABASES = {
+        'default': env.db('DATABASE_URL')
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": env('DB_NAME', default='centremagnim'),
+            "USER": env('DB_USER', default='postgres'),
+            "PASSWORD": env('DB_PASSWORD', default=''),
+            "HOST": env('DB_HOST', default='localhost'),
+            "PORT": env('DB_PORT', default='5432'),
+        }
+    }
 
 # --- VALIDATION DES MOTS DE PASSE ---
 AUTH_PASSWORD_VALIDATORS = [
@@ -155,8 +160,7 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# Optimisation du stockage WhiteNoise pour la production
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+# L'optimisation du stockage WhiteNoise est gérée dans l'objet STORAGES ci-dessous
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
@@ -188,15 +192,33 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 12,
 }
 
-# --- CONFIGURATION STORAGE CLOUDINARY ---
+# --- CONFIGURATION STORAGE (CLOUDINARY & WHITENOISE) ---
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': env('CLOUDINARY_API_KEY'),
-    'API_SECRET': env('CLOUDINARY_API_SECRET'),
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+    'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
 }
 CLOUDINARY_STORAGE['STATICFILES_STORAGE'] = None
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+# Utilisation de Cloudinary si configuré, sinon repli sur le système de fichiers local
+if CLOUDINARY_STORAGE['CLOUD_NAME']:
+    STORAGES = {
+        "default": {
+            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
+else:
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+        },
+    }
 
 
 # =====================================================================
