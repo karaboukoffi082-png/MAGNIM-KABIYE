@@ -50,3 +50,6 @@ Thumbs.db
 # Custom folders
 LDPlayer9/
 ldmutiplayer/
+
+# Deployment documentation
+DEPLOYMENT.md
