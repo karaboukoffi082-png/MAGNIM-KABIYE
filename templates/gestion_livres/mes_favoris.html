@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Favoris — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="section-title mb-4">Mes Favoris ❤️</h2>
+    {% if favoris %}
+    <div class="row g-3">
+        {% for favori in favoris %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="book-card card h-100">
+                <a href="{% url 'detail_livre' favori.livre.slug %}">
+                    <div class="card-img-wrapper">
+                        {% if favori.livre.image_principale %}
+                        <img src="{{ favori.livre.image_principale.url }}" alt="{{ favori.livre.titre }}">
+                        {% else %}
+                        <span class="no-img-placeholder">📚</span>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="card-body d-flex flex-column p-3">
+                    <p class="book-author mb-1">{{ favori.livre.auteur }}</p>
+                    <h6 class="book-title mb-2">
+                        <a href="{% url 'detail_livre' favori.livre.slug %}" class="text-dark text-decoration-none">{{ favori.livre.titre }}</a>
+                    </h6>
+                    <div class="mt-auto d-flex justify-content-between align-items-center">
+                        <span class="price-badge">{{ favori.livre.prix_actuel }} FCFA</span>
+                        <div class="d-flex gap-1">
+                            <a href="{% url 'ajouter_au_panier' favori.livre.id %}" class="btn btn-sm btn-outline-success rounded-circle p-1">
+                                <i class="bi bi-bag-plus"></i>
+                            </a>
+                            <a href="{% url 'toggle_favori' favori.livre.slug %}" class="btn btn-sm btn-outline-danger rounded-circle p-1">
+                                <i class="bi bi-heart-fill"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <span style="font-size:4rem">❤️</span>
+        <h4 class="mt-3 text-muted">Aucun favori</h4>
+        <p class="text-muted">Ajoutez des livres à vos favoris pour les retrouver facilement.</p>
+        <a href="{% url 'boutique' %}" class="btn btn-kb-gold mt-2">Découvrir la boutique</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

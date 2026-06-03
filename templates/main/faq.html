@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}FAQ — Questions fréquentes — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active">FAQ</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <div style="font-size:3.5rem">❓</div>
+                <h1 class="h2 fw-bold mb-2">Questions Fréquentes</h1>
+                <p class="text-muted">Tout ce que vous devez savoir sur KabiyèBooks</p>
+                <div class="mx-auto rounded" style="width:60px;height:4px;background:var(--kb-gold)"></div>
+            </div>
+
+            <!-- Commandes & Paiement -->
+            <h5 class="fw-bold mb-3 text-kb-green"><i class="bi bi-bag me-2"></i>Commandes &amp; Paiement</h5>
+            <div class="accordion mb-4" id="faq-commandes">
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Comment passer une commande ?
+                        </button>
+                    </h6>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faq-commandes">
+                        <div class="accordion-body text-muted">
+                            <ol>
+                                <li>Créez un compte gratuit ou connectez-vous</li>
+                                <li>Ajoutez vos livres au panier</li>
+                                <li>Cliquez sur « Passer commande » et renseignez votre adresse</li>
+                                <li><strong>Effectuez votre paiement</strong> (Flooz, T-Money, carte bancaire)</li>
+                                <li>Votre commande est confirmée après validation du paiement</li>
+                            </ol>
+                            <div class="alert alert-warning border-0 rounded mt-2 small">
+                                <i class="bi bi-exclamation-triangle me-1"></i>
+                                <strong>Le paiement est obligatoire</strong> pour valider toute commande ou téléchargement.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Quels modes de paiement sont acceptés ?
+                        </button>
+                    </h6>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faq-commandes">
+                        <div class="accordion-body text-muted">
+                            Nous acceptons :
+                            <ul>
+                                <li><strong>Flooz</strong> (Moov Africa)</li>
+                                <li><strong>T-Money</strong> (Togocom)</li>
+                                <li><strong>Carte bancaire</strong> (Visa, Mastercard)</li>
+                            </ul>
+                            Tous les paiements sont traités de manière sécurisée. <em>Aucune commande n'est validée sans paiement.</em>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Puis-je annuler ma commande ?
+                        </button>
+                    </h6>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faq-commandes">
+                        <div class="accordion-body text-muted">
+                            Vous pouvez annuler une commande tant qu'elle est en statut <strong>« En attente »</strong> ou <strong>« Confirmée »</strong>.
+                            Une fois expédiée, l'annulation n'est plus possible. Contactez-nous immédiatement si vous souhaitez annuler.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Livraison -->
+            <h5 class="fw-bold mb-3 text-kb-green"><i class="bi bi-truck me-2"></i>Livraison</h5>
+            <div class="accordion mb-4" id="faq-livraison">
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq4">
+                            Quels sont les délais de livraison ?
+                        </button>
+                    </h6>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faq-livraison">
+                        <div class="accordion-body text-muted">
+                            <ul>
+                                <li><strong>Lomé :</strong> 1 à 2 jours ouvrés</li>
+                                <li><strong>Togo (autres villes) :</strong> 3 à 5 jours ouvrés</li>
+                                <li><strong>International :</strong> 7 à 21 jours selon le pays</li>
+                                <li><strong>PDF numérique :</strong> <span class="text-kb-green fw-semibold">Immédiat après paiement ✓</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq5">
+                            Puis-je venir chercher mon livre en boutique ?
+                        </button>
+                    </h6>
+                    <div id="faq5" class="accordion-collapse collapse" data-bs-parent="#faq-livraison">
+                        <div class="accordion-body text-muted">
+                            Oui ! Vous pouvez venir retirer votre commande directement à notre boutique
+                            <strong>Centremagnim, Lomé</strong>, du lundi au samedi de 8h à 18h.
+                            Signalez votre souhait de retrait lors de la commande via la zone de commentaires.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Livres numériques PDF -->
+            <h5 class="fw-bold mb-3 text-kb-green"><i class="bi bi-file-earmark-pdf me-2"></i>Livres numériques (PDF)</h5>
+            <div class="accordion mb-4" id="faq-pdf">
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq6">
+                            Comment accéder à un livre PDF après achat ?
+                        </button>
+                    </h6>
+                    <div id="faq6" class="accordion-collapse collapse" data-bs-parent="#faq-pdf">
+                        <div class="accordion-body text-muted">
+                            <ol>
+                                <li>Achetez le livre numérique et payez en ligne</li>
+                                <li>Dès confirmation du paiement, accédez à votre espace <a href="{% url 'mes_telechargements' %}">« Mes téléchargements »</a></li>
+                                <li>Cliquez sur « Télécharger le PDF »</li>
+                                <li>Le téléchargement est illimité — lisez sur tous vos appareils</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq7">
+                            Combien de fois puis-je télécharger un PDF ?
+                        </button>
+                    </h6>
+                    <div id="faq7" class="accordion-collapse collapse" data-bs-parent="#faq-pdf">
+                        <div class="accordion-body text-muted">
+                            Les téléchargements sont <strong>illimités</strong> pour les livres achetés.
+                            Vous pouvez re-télécharger à tout moment depuis votre compte, sur n'importe quel appareil.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Boutique physique -->
+            <h5 class="fw-bold mb-3 text-kb-green"><i class="bi bi-shop me-2"></i>Boutique Centremagnim</h5>
+            <div class="accordion mb-5" id="faq-boutique">
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq8">
+                            Où se trouve votre boutique physique ?
+                        </button>
+                    </h6>
+                    <div id="faq8" class="accordion-collapse collapse" data-bs-parent="#faq-boutique">
+                        <div class="accordion-body text-muted">
+                            Notre boutique <strong>Centremagnim</strong> est située à <strong>Lomé, Togo</strong>.
+                            Horaires : <strong>Lun–Sam 8h–18h / Dim 10h–14h</strong>.
+                            <br>Tél. : +228 70 76 60 60 | WhatsApp disponible.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm rounded-xl mb-2 overflow-hidden">
+                    <h6 class="accordion-header">
+                        <button class="accordion-button collapsed fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#faq9">
+                            Puis-je acheter sur place sans commande en ligne ?
+                        </button>
+                    </h6>
+                    <div id="faq9" class="accordion-collapse collapse" data-bs-parent="#faq-boutique">
+                        <div class="accordion-body text-muted">
+                            Oui ! Venez directement dans notre boutique Centremagnim pour parcourir
+                            notre sélection et acheter sur place. Nous acceptons les paiements en espèces,
+                            Flooz et T-Money en boutique.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <p class="text-muted mb-3">Vous n'avez pas trouvé de réponse ?</p>
+                <a href="{% url 'contact' %}" class="btn btn-kb-gold px-5">
+                    <i class="bi bi-envelope me-2"></i>Contactez-nous
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

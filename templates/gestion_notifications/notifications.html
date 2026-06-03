@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Mes notifications — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-xl p-3">
+                <div class="text-center py-3">
+                    {% if user.photo_profil %}
+                    <img src="{{ user.photo_profil.url }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit:cover">
+                    {% else %}
+                    <div class="avatar-circle mx-auto mb-3" style="width:80px;height:80px;font-size:2rem;background:var(--kb-green)">
+                        {{ user.get_short_name|first|upper }}
+                    </div>
+                    {% endif %}
+                    <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
+                </div>
+                <hr>
+                <nav class="nav flex-column gap-1">
+                    <a href="{% url 'tableau_de_bord' %}" class="nav-link px-3 py-2 rounded-3 text-dark">
+                        <i class="bi bi-grid me-2"></i>Tableau de bord
+                    </a>
+                    <a href="{% url 'profil' %}" class="nav-link px-3 py-2 rounded-3 text-dark">
+                        <i class="bi bi-person me-2"></i>Mon profil
+                    </a>
+                    <a href="{% url 'mes_commandes' %}" class="nav-link px-3 py-2 rounded-3 text-dark">
+                        <i class="bi bi-bag-check me-2"></i>Mes commandes
+                    </a>
+                    <a href="{% url 'mes_notifications' %}" class="nav-link px-3 py-2 rounded-3 active bg-light text-dark">
+                        <i class="bi bi-bell me-2"></i>Notifications
+                    </a>
+                    <hr class="my-1">
+                    <a href="{% url 'deconnexion' %}" class="nav-link px-3 py-2 rounded-3 text-danger">
+                        <i class="bi bi-box-arrow-right me-2"></i>Déconnexion
+                    </a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Notifications list -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="section-title mb-0">
+                    <i class="bi bi-bell me-2"></i>Notifications
+                    {% if non_lues > 0 %}
+                    <span class="badge bg-danger ms-2">{{ non_lues }} nouvelle{{ non_lues|pluralize }}</span>
+                    {% endif %}
+                </h4>
+                {% if notifications %}
+                <a href="{% url 'marquer_toutes_lues' %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-check-all me-1"></i>Tout marquer lu
+                </a>
+                {% endif %}
+            </div>
+
+            {% if notifications %}
+            <div class="card border-0 shadow-sm rounded-xl overflow-hidden">
+                {% for notif in notifications %}
+                <div class="notif-item p-3 border-bottom d-flex gap-3 {% if not notif.lue %}bg-light{% endif %}">
+                    <div class="flex-shrink-0 mt-1">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center
+                            {% if notif.type == 'commande' %}bg-primary
+                            {% elif notif.type == 'paiement' %}bg-success
+                            {% elif notif.type == 'livraison' %}bg-warning
+                            {% elif notif.type == 'promo' %}bg-danger
+                            {% else %}bg-secondary{% endif %} text-white"
+                            style="width:38px;height:38px;font-size:0.9rem">
+                            <i class="bi
+                                {% if notif.type == 'commande' %}bi-bag-check
+                                {% elif notif.type == 'paiement' %}bi-credit-card
+                                {% elif notif.type == 'livraison' %}bi-truck
+                                {% elif notif.type == 'promo' %}bi-tag
+                                {% else %}bi-info-circle{% endif %}">
+                            </i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start mb-1">
+                            <span class="fw-semibold {% if not notif.lue %}text-dark{% else %}text-muted{% endif %}">
+                                {{ notif.titre }}
+                            </span>
+                            <span class="text-muted small text-nowrap ms-3">{{ notif.created_at|timesince }} ago</span>
+                        </div>
+                        <p class="text-muted small mb-0">{{ notif.message }}</p>
+                        {% if notif.lien %}
+                        <a href="{% url 'marquer_notification_lue' notif.pk %}" class="btn btn-xs btn-link p-0 small mt-1 text-kb-green">
+                            Voir les détails →
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% if not notif.lue %}
+                    <div class="flex-shrink-0 mt-2">
+                        <span class="badge rounded-circle bg-kb-green p-1" style="width:10px;height:10px;display:inline-block"></span>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="text-center py-5">
+                <span style="font-size:4rem">🔔</span>
+                <h4 class="mt-3 text-muted">Aucune notification</h4>
+                <p class="text-muted">Vous n'avez pas encore de notifications. Elles apparaîtront ici après vos commandes et paiements.</p>
+                <a href="{% url 'boutique' %}" class="btn btn-kb-gold">Explorer la boutique</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

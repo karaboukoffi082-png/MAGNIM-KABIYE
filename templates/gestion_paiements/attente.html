@@ -1,0 +1,329 @@
+{% extends "base.html" %}
+
+{% block title %}En attente de paiement — {{ commande.numero }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .pulse-ring {
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: rgba(45,138,71,.15);
+    display: flex; align-items: center; justify-content: center;
+    animation: pulse 2s ease-in-out infinite;
+    margin: 0 auto 1.5rem;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(45,138,71,.4); }
+    50%       { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(45,138,71,0); }
+  }
+  .countdown-ring {
+    position: relative; width: 80px; height: 80px; margin: 0 auto 1rem;
+  }
+  .countdown-ring svg { transform: rotate(-90deg); }
+  .countdown-ring .progress-circle {
+    stroke-dasharray: 220;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+  }
+  #countdown-num {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 1.4rem; font-weight: 700;
+  }
+  .status-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #ffc107;
+    animation: blink 1.2s ease-in-out infinite;
+    display: inline-block;
+  }
+  .status-dot.valide  { background: #28a745; animation: none; }
+  .status-dot.echoue  { background: #dc3545; animation: none; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+  /* Simulation panel (DEBUG) */
+  .sim-panel { border: 2px dashed #ffc107; background: #fffdf0; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-xl-5">
+
+      <!-- État : en cours -->
+      <div id="panel-attente">
+        <div class="text-center mb-4">
+          <div class="pulse-ring">
+            {% if paiement.methode == "flooz" %}
+              <span style="font-size:2.5rem">🟦</span>
+            {% elif paiement.methode == "tmoney" %}
+              <span style="font-size:2.5rem">🟩</span>
+            {% else %}
+              <i class="bi bi-hourglass-split text-kb-green" style="font-size:2.5rem"></i>
+            {% endif %}
+          </div>
+          <h4 class="fw-bold mb-2">En attente de paiement</h4>
+          <p class="text-muted">
+            {% if paiement.methode == "flooz" %}
+              Vérifiez votre téléphone <strong>{{ paiement.telephone }}</strong> et validez la demande Flooz.
+            {% elif paiement.methode == "tmoney" %}
+              Vérifiez votre téléphone <strong>{{ paiement.telephone }}</strong> et validez la demande T-Money.
+            {% else %}
+              Traitement de votre demande en cours…
+            {% endif %}
+          </p>
+        </div>
+
+        <!-- Info commande -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted small">Commande</span>
+              <strong>{{ commande.numero }}</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted small">Montant</span>
+              <strong class="text-kb-green fs-5">{{ paiement.montant|floatformat:0 }} FCFA</strong>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted small">Mode</span>
+              <strong>{{ paiement.get_methode_display }}</strong>
+            </div>
+            {% if paiement.reference %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <span class="text-muted small">Référence</span>
+              <code class="small">{{ paiement.reference }}</code>
+            </div>
+            {% endif %}
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="text-muted small">Statut</span>
+              <span>
+                <span class="status-dot me-1" id="status-dot"></span>
+                <span id="statut-label">{{ paiement.get_statut_display }}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Code USSD -->
+        {% if paiement.code_ussd %}
+        <div class="card border-0 shadow-sm rounded-4 mb-4" style="background:#f0f8f0">
+          <div class="card-body p-3">
+            <div class="small fw-semibold text-muted mb-2">
+              <i class="bi bi-phone me-1"></i>Code USSD alternatif
+            </div>
+            <div class="d-flex align-items-center justify-content-between">
+              <code class="fs-5 text-kb-green fw-bold">{{ paiement.code_ussd }}</code>
+              <button class="btn btn-sm btn-outline-success" onclick="copierUssd(this)">
+                <i class="bi bi-clipboard"></i> Copier
+              </button>
+            </div>
+            <div class="small text-muted mt-1">Composez ce code sur votre téléphone si vous ne recevez pas de notification.</div>
+          </div>
+        </div>
+        {% endif %}
+
+        <!-- Message opérateur -->
+        {% if paiement.message_operateur %}
+        <div class="alert alert-info border-0 rounded-4 mb-4 small" id="msg-operateur">
+          <i class="bi bi-info-circle me-2"></i>{{ paiement.message_operateur }}
+        </div>
+        {% endif %}
+
+        <!-- Minuterie -->
+        <div class="card border-0 shadow-sm rounded-4 mb-4">
+          <div class="card-body p-4 text-center">
+            <div class="small text-muted mb-2">Temps restant pour valider</div>
+            <div class="countdown-ring">
+              <svg width="80" height="80">
+                <circle cx="40" cy="40" r="35" fill="none" stroke="#e9ecef" stroke-width="6"/>
+                <circle cx="40" cy="40" r="35" fill="none" stroke="#2d8a47" stroke-width="6"
+                        class="progress-circle" id="progress-circle"/>
+              </svg>
+              <div id="countdown-num">{{ secondes_restantes }}</div>
+            </div>
+            <div class="small text-muted" id="countdown-text">minutes restantes</div>
+          </div>
+        </div>
+
+        <!-- Simulation (DEBUG only) -->
+        {% if debug %}
+        <div class="card sim-panel rounded-4 mb-4">
+          <div class="card-body p-3">
+            <div class="small fw-bold text-warning mb-2">
+              <i class="bi bi-tools me-1"></i>Simulation paiement (mode développement)
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-success btn-sm flex-grow-1" onclick="simuler('valider')">
+                <i class="bi bi-check-circle me-1"></i>Simuler succès
+              </button>
+              <button class="btn btn-danger btn-sm flex-grow-1" onclick="simuler('echouer')">
+                <i class="bi bi-x-circle me-1"></i>Simuler échec
+              </button>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        <div class="text-center">
+          <a href="{% url 'payer_commande' commande.numero %}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Changer de mode de paiement
+          </a>
+        </div>
+      </div>
+
+      <!-- État : succès (caché par défaut) -->
+      <div id="panel-succes" class="d-none text-center py-5">
+        <div class="mb-4">
+          <div style="width:100px;height:100px;background:#d4edda;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto">
+            <i class="bi bi-check-circle-fill text-success" style="font-size:3rem"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold text-success mb-2">Paiement confirmé !</h4>
+        <p class="text-muted">Redirection vers votre commande…</p>
+        <div class="spinner-border text-success" role="status"></div>
+      </div>
+
+      <!-- État : échec (caché par défaut) -->
+      <div id="panel-echec" class="d-none text-center py-4">
+        <div class="mb-4">
+          <div style="width:100px;height:100px;background:#f8d7da;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto">
+            <i class="bi bi-x-circle-fill text-danger" style="font-size:3rem"></i>
+          </div>
+        </div>
+        <h4 class="fw-bold text-danger mb-2">Paiement échoué</h4>
+        <p class="text-muted" id="echec-message">Le paiement n'a pas pu être traité.</p>
+        {% if paiement.peut_reessayer %}
+        <a href="{% url 'payer_commande' commande.numero %}" class="btn btn-kb-gold me-2">
+          <i class="bi bi-arrow-repeat me-1"></i>Réessayer
+        </a>
+        {% endif %}
+        <a href="{% url 'detail_commande' commande.numero %}" class="btn btn-outline-secondary">
+          Voir la commande
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const STATUT_URL    = "{% url 'statut_paiement_ajax' commande.numero %}";
+  const SUCCES_URL    = "{% url 'succes_paiement' commande.numero %}";
+  const SIM_URL       = "{% url 'simuler_confirmation' commande.numero %}";
+  const CSRF          = "{{ csrf_token }}";
+  const DUREE_TOTALE  = {{ secondes_restantes }};
+
+  let secondes = DUREE_TOTALE;
+  let pollingId, countdownId;
+  const circle   = document.getElementById('progress-circle');
+  const num      = document.getElementById('countdown-num');
+  const txtLabel = document.getElementById('countdown-text');
+  const circumference = 2 * Math.PI * 35; // 220
+
+  function formatTemps(s) {
+    const m = Math.floor(s / 60);
+    const sec = s % 60;
+    return m > 0
+      ? m + ':' + String(sec).padStart(2, '0')
+      : s + 's';
+  }
+
+  function mettreAJourMinuterie(s) {
+    if (!circle || !num) return;
+    const offset = circumference * (1 - s / DUREE_TOTALE);
+    circle.style.strokeDashoffset = offset;
+    num.textContent = formatTemps(s);
+    txtLabel.textContent = s > 60 ? 'min restantes' : 'secondes restantes';
+  }
+
+  mettreAJourMinuterie(secondes);
+
+  countdownId = setInterval(function () {
+    secondes = Math.max(0, secondes - 1);
+    mettreAJourMinuterie(secondes);
+    if (secondes <= 0) {
+      clearInterval(countdownId);
+      afficherEchec("Le temps imparti pour valider le paiement est écoulé.");
+    }
+  }, 1000);
+
+  function afficherSucces() {
+    clearInterval(pollingId);
+    clearInterval(countdownId);
+    document.getElementById('panel-attente').classList.add('d-none');
+    document.getElementById('panel-succes').classList.remove('d-none');
+    setTimeout(function () { window.location.href = SUCCES_URL; }, 2000);
+  }
+
+  function afficherEchec(message) {
+    clearInterval(pollingId);
+    clearInterval(countdownId);
+    document.getElementById('panel-attente').classList.add('d-none');
+    document.getElementById('panel-echec').classList.remove('d-none');
+    if (message) document.getElementById('echec-message').textContent = message;
+  }
+
+  function interrogerStatut() {
+    fetch(STATUT_URL, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(function (r) { 
+        if (!r.ok) throw new Error('Statut HTTP invalide');
+        return r.json(); 
+      })
+      .then(function (data) {
+        const dot   = document.getElementById('status-dot');
+        const label = document.getElementById('statut-label');
+        if (label && data.statut_label) label.textContent = data.statut_label;
+        
+        if (dot) {
+          dot.className = 'status-dot me-1 ' + (data.valide ? 'valide' : data.statut === 'echoue' ? 'echoue' : '');
+        }
+        
+        if (data.valide) {
+          afficherSucces();
+        } else if (data.statut === 'echoue' || data.statut === 'expire' || data.statut === 'annule') {
+          afficherEchec(data.message || 'Paiement non complété.');
+        }
+      })
+      .catch(function (err) { 
+        // L'erreur SSL ou de timeout remonte ici. On la log de manière transparente 
+        // sans interrompre l'expérience utilisateur ni bloquer le prochain tick.
+        console.warn('Vérification en attente (reconnexion au prochain cycle) :', err.message); 
+      });
+  }
+
+  // Premier appel immédiat au chargement pour les plus rapides
+  setTimeout(interrogerStatut, 1000);
+  
+  // Polling fixé à 12000ms (12 secondes) pour respecter les limites de BkaPay
+  pollingId = setInterval(interrogerStatut, 12000);
+
+  window.copierUssd = function (btn) {
+    const code = btn.previousElementSibling.textContent.trim();
+    navigator.clipboard.writeText(code).then(function () {
+      btn.innerHTML = '<i class="bi bi-check"></i> Copié !';
+      setTimeout(function () { btn.innerHTML = '<i class="bi bi-clipboard"></i> Copier'; }, 2000);
+    });
+  };
+
+  window.simuler = function (action) {
+    fetch(SIM_URL, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': CSRF,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: 'action=' + action,
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.valide) afficherSucces();
+        else afficherEchec('Paiement simulé comme échoué.');
+      });
+  };
+})();
+</script>
+{% endblock %}

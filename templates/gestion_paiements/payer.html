@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+
+{% block title %}Paiement — Commande {{ commande.numero }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  .payment-card {
+    transition: all .2s ease;
+    border-color: #dee2e6 !important;
+    cursor: pointer;
+  }
+  .payment-card:hover {
+    border-color: #c8a84b !important;
+    box-shadow: 0 4px 15px rgba(200,168,75,.15);
+  }
+  .payment-card.selected {
+    border-color: #2d8a47 !important;
+    box-shadow: 0 4px 20px rgba(45,138,71,.2);
+    background: #f8fff9;
+  }
+  .cursor-pointer { cursor: pointer; }
+  .phone-input-section { animation: slideDown .2s ease; }
+  @keyframes slideDown {
+    from { opacity:0; transform:translateY(-8px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-7 col-xl-6">
+
+      <div class="d-flex align-items-center mb-4">
+        <a href="{% url 'detail_commande' commande.numero %}" class="btn btn-sm btn-outline-secondary me-3">
+          <i class="bi bi-arrow-left"></i>
+        </a>
+        <div>
+          <h4 class="mb-0 fw-bold">Paiement sécurisé</h4>
+          <small class="text-muted">Commande {{ commande.numero }}</small>
+        </div>
+      </div>
+
+      <div class="card border-0 shadow rounded-4 mb-4" style="background:linear-gradient(135deg,#1a5c2a,#2d8a47)">
+        <div class="card-body p-4 text-white">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <div class="small opacity-75 mb-1">Montant total à payer</div>
+              <div class="display-6 fw-bold">{{ commande.total|floatformat:0 }} <span class="fs-5">FCFA</span></div>
+            </div>
+            <div class="text-end opacity-75">
+              <i class="bi bi-shield-lock-fill" style="font-size:3rem"></i>
+              <div class="small mt-1">Paiement sécurisé</div>
+            </div>
+          </div>
+          {% if commande.lignes.count %}
+          <hr class="border-white opacity-25 my-3">
+          <div class="small opacity-75">
+            {% for ligne in commande.lignes.all %}
+            <span class="me-3"><i class="bi bi-book me-1"></i>{{ ligne.titre_livre }} × {{ ligne.quantite }}</span>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      {% if paiement and paiement.peut_reessayer %}
+      <div class="alert alert-warning border-0 rounded-4 mb-4">
+        <i class="bi bi-exclamation-triangle me-2"></i>
+        Paiement précédent <strong>{{ paiement.get_statut_display }}</strong>.
+        Vous pouvez réessayer (tentative {{ paiement.tentatives }}/3).
+      </div>
+      {% endif %}
+
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-danger border-0 rounded-4 mb-4">
+            <i class="bi bi-exclamation-circle me-2"></i>{{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+
+      <form method="post" action="{% url 'initier_paiement' commande.numero %}" id="form-paiement">
+        {% csrf_token %}
+
+        <p class="fw-semibold text-uppercase small text-muted mb-3" style="letter-spacing:.08em">
+          Mode de paiement
+        </p>
+
+        <label class="d-block mb-3 cursor-pointer" for="radio-flooz">
+          <input type="radio" name="methode" value="flooz" class="d-none methode-radio" id="radio-flooz">
+          <div class="payment-card card border-2 rounded-4 p-0 overflow-hidden" data-methode="flooz">
+            <div class="d-flex align-items-center p-3">
+              <div class="rounded-3 me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:#E8F0FE;font-size:1.8rem">🟦</div>
+              <div class="flex-grow-1">
+                <div class="fw-bold">Flooz <span class="badge bg-primary ms-1" style="font-size:.7rem">Moov Africa</span></div>
+                <div class="small text-muted">Numéros commençant par 96, 97, 98, 99</div>
+              </div>
+              <div class="check-icon text-success d-none"><i class="bi bi-check-circle-fill fs-4"></i></div>
+            </div>
+            <div class="phone-input-section border-top px-3 py-3 d-none" style="background:#f8f9fa" id="phone-flooz">
+              <label class="form-label small fw-semibold mb-2">Numéro Flooz (8 chiffres)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-telephone me-1"></i>+228</span>
+                <input type="tel" id="tel-flooz" class="form-control tel-input"
+                       placeholder="90 12 34 56" pattern="[0-9 ]{8,11}" inputmode="numeric">
+              </div>
+              <div class="small text-muted mt-2">
+                <i class="bi bi-info-circle me-1"></i>
+                Une redirection sécurisée vers l'interface de paiement sera effectuée.
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <label class="d-block mb-3 cursor-pointer" for="radio-tmoney">
+          <input type="radio" name="methode" value="tmoney" class="d-none methode-radio" id="radio-tmoney">
+          <div class="payment-card card border-2 rounded-4 p-0 overflow-hidden" data-methode="tmoney">
+            <div class="d-flex align-items-center p-3">
+              <div class="rounded-3 me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:#E8F8E8;font-size:1.8rem">🟩</div>
+              <div class="flex-grow-1">
+                <div class="fw-bold">T-Money <span class="badge bg-success ms-1" style="font-size:.7rem">Togocom</span></div>
+                <div class="small text-muted">Numéros commençant par 70, 71, 72, 93, 90</div>
+              </div>
+              <div class="check-icon text-success d-none"><i class="bi bi-check-circle-fill fs-4"></i></div>
+            </div>
+            <div class="phone-input-section border-top px-3 py-3 d-none" style="background:#f8f9fa" id="phone-tmoney">
+              <label class="form-label small fw-semibold mb-2">Numéro T-Money (8 chiffres)</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="bi bi-telephone me-1"></i>+228</span>
+                <input type="tel" id="tel-tmoney" class="form-control tel-input"
+                       placeholder="70 12 34 56" pattern="[0-9 ]{8,11}" inputmode="numeric">
+              </div>
+              <div class="small text-muted mt-2">
+                <i class="bi bi-info-circle me-1"></i>
+                Une redirection sécurisée vers l'interface de paiement sera effectuée.
+              </div>
+            </div>
+          </div>
+        </label>
+
+        <label class="d-block mb-4 cursor-pointer" for="radio-especes">
+          <input type="radio" name="methode" value="especes" class="d-none methode-radio" id="radio-especes">
+          <div class="payment-card card border-2 rounded-4 p-3" data-methode="especes">
+            <div class="d-flex align-items-center">
+              <div class="rounded-3 me-3 flex-shrink-0 d-flex align-items-center justify-content-center"
+                   style="width:52px;height:52px;background:#FFF3E0">
+                <i class="bi bi-cash-coin text-warning fs-3"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="fw-bold">Espèces à la livraison</div>
+                <div class="small text-muted">Payez en cash quand vous recevez votre commande</div>
+              </div>
+              <div class="check-icon text-success d-none"><i class="bi bi-check-circle-fill fs-4"></i></div>
+            </div>
+          </div>
+        </label>
+
+        <input type="hidden" name="telephone" id="id-telephone-final">
+
+        <button type="submit" class="btn btn-kb-gold w-100 py-3 fw-bold fs-5 rounded-4" id="btn-payer" disabled>
+          <i class="bi bi-shield-check me-2"></i>
+          <span id="btn-label">Sélectionnez un mode de paiement</span>
+        </button>
+
+        <div class="text-center mt-3">
+          <small class="text-muted">
+            <i class="bi bi-lock-fill me-1"></i>
+            Vos informations sont protégées et chiffrées
+          </small>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+  const radios    = document.querySelectorAll('.methode-radio');
+  const btn       = document.getElementById('btn-payer');
+  const label     = document.getElementById('btn-label');
+  const finalTel  = document.getElementById('id-telephone-final');
+
+  const btnLabels = {
+    flooz:   '🟦 Payer {{ commande.total|floatformat:0 }} FCFA avec Flooz',
+    tmoney:  '🟩 Payer {{ commande.total|floatformat:0 }} FCFA avec T-Money',
+    especes: '💵 Confirmer — Paiement à la livraison',
+  };
+
+  // 1. Formatage dynamique des numéros de téléphone pendant la saisie (ex: 90 12 34 56)
+  document.querySelectorAll('.tel-input').forEach(function (input) {
+    input.addEventListener('input', function (e) {
+      let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+      let matches = value.match(/\d{1,2}/g);
+      if (matches) {
+        e.target.value = matches.join(' ').substring(0, 11);
+      }
+    });
+  });
+
+  // 2. Gestion du changement d'opérateur
+  radios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      const methode = this.value;
+
+      // Reset visuel
+      document.querySelectorAll('.payment-card').forEach(function (c) {
+        c.classList.remove('selected');
+        c.querySelector('.check-icon').classList.add('d-none');
+      });
+      document.querySelectorAll('.phone-input-section').forEach(function (s) {
+        s.classList.add('d-none');
+        const input = s.querySelector('input');
+        if(input) { input.required = false; input.disabled = true; }
+      });
+
+      // Activer l'élément sélectionné
+      const card = document.querySelector('.payment-card[data-methode="' + methode + '"]');
+      card.classList.add('selected');
+      card.querySelector('.check-icon').classList.remove('d-none');
+
+      const phoneSection = document.getElementById('phone-' + methode);
+      if (phoneSection) {
+        phoneSection.classList.remove('d-none');
+        const activeInput = phoneSection.querySelector('input');
+        activeInput.disabled = false;
+        activeInput.required = true;
+        activeInput.focus();
+      }
+
+      btn.disabled = false;
+      label.textContent = btnLabels[methode] || 'Confirmer le paiement';
+    });
+  });
+
+  // 3. Soumission sécurisée du formulaire
+  document.getElementById('form-paiement').addEventListener('submit', function (e) {
+    const checked = document.querySelector('.methode-radio:checked');
+    if (!checked) { e.preventDefault(); return; }
+
+    if (checked.value === 'flooz' || checked.value === 'tmoney') {
+      const activeInput = document.getElementById('tel-' + checked.value);
+      // On retire les espaces superflus avant envoi à Django
+      const cleanValue = activeInput.value.replace(/\s+/g, '');
+      
+      if (cleanValue.length !== 8) {
+        alert("Veuillez saisir un numéro de téléphone valide à 8 chiffres.");
+        e.preventDefault();
+        return;
+      }
+      finalTel.value = cleanValue;
+    } else {
+      finalTel.value = ""; // Pas de téléphone requis pour l'option espèces
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Traitement en cours via BkaPay…';
+  });
+})();
+</script>
+{% endblock %}

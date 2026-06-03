@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Politique de confidentialité — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active">Confidentialité</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <div style="font-size:3rem">🔒</div>
+                <h1 class="h2 fw-bold mb-2">Politique de Confidentialité</h1>
+                <p class="text-muted">Dernière mise à jour : Mai 2026</p>
+                <div class="mx-auto rounded" style="width:60px;height:4px;background:var(--kb-gold)"></div>
+            </div>
+
+            <div class="prose text-muted" style="line-height:1.8">
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-check me-2 text-kb-green"></i>1. Collecte des données personnelles</h5>
+                    <p>KabiyèBooks (Centremagnim, Lomé, Togo) collecte les données personnelles suivantes lors de votre utilisation de notre plateforme :</p>
+                    <ul>
+                        <li><strong>Données d'inscription :</strong> nom, prénom, adresse e-mail, mot de passe (chiffré), numéro de téléphone</li>
+                        <li><strong>Données de commande :</strong> adresse de livraison, ville, pays</li>
+                        <li><strong>Données de paiement :</strong> méthode de paiement, référence de transaction (nous ne stockons jamais vos données bancaires complètes)</li>
+                        <li><strong>Données de navigation :</strong> adresse IP, cookies de session</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-gear me-2 text-kb-green"></i>2. Utilisation des données</h5>
+                    <p>Vos données sont utilisées exclusivement pour :</p>
+                    <ul>
+                        <li>Gérer votre compte et authentifier vos connexions</li>
+                        <li>Traiter vos commandes et organiser les livraisons</li>
+                        <li>Traiter vos paiements de façon sécurisée</li>
+                        <li>Vous envoyer des notifications relatives à vos commandes</li>
+                        <li>Améliorer nos services et la qualité de la plateforme</li>
+                    </ul>
+                    <p class="mb-0"><strong>Nous ne vendons jamais vos données à des tiers.</strong></p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-shield-lock me-2 text-kb-green"></i>3. Sécurité des données</h5>
+                    <p>Nous prenons la sécurité de vos données très au sérieux :</p>
+                    <ul>
+                        <li>Mots de passe chiffrés (hachage bcrypt)</li>
+                        <li>Sessions sécurisées avec clé secrète</li>
+                        <li>Communications HTTPS chiffrées</li>
+                        <li>Accès aux fichiers PDF protégés — jamais accessibles directement par URL</li>
+                        <li>Données de paiement transmises directement aux opérateurs (Flooz, T-Money)</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-cookie me-2 text-kb-green"></i>4. Cookies</h5>
+                    <p>Nous utilisons des cookies pour :</p>
+                    <ul>
+                        <li><strong>Cookies de session :</strong> nécessaires pour vous garder connecté et maintenir votre panier</li>
+                        <li><strong>Cookies CSRF :</strong> protection contre les attaques cross-site</li>
+                    </ul>
+                    <p class="mb-0">Nous n'utilisons pas de cookies publicitaires ou de suivi tiers.</p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-person-x me-2 text-kb-green"></i>5. Vos droits</h5>
+                    <p>Conformément aux réglementations en vigueur, vous disposez des droits suivants :</p>
+                    <ul>
+                        <li><strong>Droit d'accès</strong> à vos données personnelles</li>
+                        <li><strong>Droit de rectification</strong> des données inexactes</li>
+                        <li><strong>Droit à l'effacement</strong> (« droit à l'oubli »)</li>
+                        <li><strong>Droit à la portabilité</strong> de vos données</li>
+                    </ul>
+                    <p>Pour exercer ces droits, contactez-nous à : <strong>centremagnim@gmail.com</strong></p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3"><i class="bi bi-clock me-2 text-kb-green"></i>6. Conservation des données</h5>
+                    <p>Vos données sont conservées :</p>
+                    <ul>
+                        <li>Données de compte : tant que votre compte est actif</li>
+                        <li>Données de commande : 5 ans (obligations légales)</li>
+                        <li>Données de navigation : 12 mois maximum</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 rounded-xl p-4 mb-4 text-center" style="background:linear-gradient(135deg,#f0fdf4,#dcfce7)">
+                    <i class="bi bi-envelope-check fs-2 text-kb-green mb-2"></i>
+                    <h6 class="fw-bold">Des questions sur vos données ?</h6>
+                    <p class="text-muted small mb-3">Contactez-nous, nous répondrons sous 48h.</p>
+                    <a href="{% url 'contact' %}" class="btn btn-kb-primary">Nous contacter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

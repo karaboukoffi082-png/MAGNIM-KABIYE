@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Commande {{ commande.numero }} — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="section-title mb-0">Commande <code>{{ commande.numero }}</code></h2>
+        <span class="badge fs-6 badge-{{ commande.statut }} p-2">{{ commande.statut_label }}</span>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-xl p-4 mb-4">
+                <h5 class="fw-bold mb-3">Articles commandés</h5>
+                {% for ligne in commande.lignes.all %}
+                <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                    <div>
+                        <div class="fw-semibold">{{ ligne.titre_livre }}</div>
+                        <div class="text-muted small">{{ ligne.prix_unitaire }} FCFA × {{ ligne.quantite }}</div>
+                    </div>
+                    <span class="fw-bold">{{ ligne.sous_total }} FCFA</span>
+                </div>
+                {% endfor %}
+                <div class="d-flex justify-content-between mt-3">
+                    <span>Frais de livraison</span>
+                    <span>{{ commande.frais_livraison }} FCFA</span>
+                </div>
+                <div class="d-flex justify-content-between mt-2">
+                    <strong class="fs-5">Total</strong>
+                    <strong class="fs-5 text-kb-green">{{ commande.total }} FCFA</strong>
+                </div>
+            </div>
+
+            {% if commande.statut == "payee" or commande.statut == "confirmee" %}
+            <a href="{% url 'payer_commande' commande.numero %}" class="btn btn-kb-gold me-2">
+                <i class="bi bi-credit-card me-2"></i>Payer maintenant
+            </a>
+            {% endif %}
+            {% if commande.statut in "en_attente,confirmee" %}
+            <a href="{% url 'annuler_commande' commande.numero %}" class="btn btn-outline-danger" onclick="return confirm('Annuler cette commande ?')">
+                Annuler
+            </a>
+            {% endif %}
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-xl p-4">
+                <h5 class="fw-bold mb-3">Informations</h5>
+                <div class="mb-2 small"><span class="text-muted">Date :</span> {{ commande.created_at|date:"d/m/Y à H:i" }}</div>
+                <div class="mb-2 small"><span class="text-muted">Adresse :</span> {{ commande.adresse_livraison }}</div>
+                <div class="mb-2 small"><span class="text-muted">Ville :</span> {{ commande.ville_livraison }}, {{ commande.pays_livraison }}</div>
+                {% if commande.paiement %}
+                <hr>
+                <div class="mb-2 small"><span class="text-muted">Paiement :</span> {{ commande.paiement.get_methode_display }}</div>
+                <div class="mb-2 small"><span class="text-muted">Réf. :</span> <code>{{ commande.paiement.reference }}</code></div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

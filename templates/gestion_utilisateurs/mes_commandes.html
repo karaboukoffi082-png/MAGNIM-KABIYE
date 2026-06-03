@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Commandes — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="section-title mb-4">Mes Commandes</h2>
+    {% if commandes %}
+    <div class="card border-0 shadow-sm rounded-xl">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Articles</th>
+                        <th>Total</th>
+                        <th>Statut</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cmd in commandes %}
+                    <tr>
+                        <td><code>{{ cmd.numero }}</code></td>
+                        <td class="small text-muted">{{ cmd.lignes.count }} article{{ cmd.lignes.count|pluralize }}</td>
+                        <td class="fw-semibold">{{ cmd.total }} FCFA</td>
+                        <td><span class="badge badge-{{ cmd.statut }}">{{ cmd.statut_label }}</span></td>
+                        <td class="small text-muted">{{ cmd.created_at|date:"d/m/Y" }}</td>
+                        <td>
+                            <a href="{% url 'detail_commande' cmd.numero %}" class="btn btn-sm btn-outline-secondary">Voir</a>
+                            {% if cmd.statut == "confirmee" %}
+                            <a href="{% url 'payer_commande' cmd.numero %}" class="btn btn-sm btn-warning">Payer</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <span style="font-size:4rem">📦</span>
+        <h4 class="mt-3 text-muted">Aucune commande</h4>
+        <a href="{% url 'boutique' %}" class="btn btn-kb-gold mt-2">Aller à la boutique</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

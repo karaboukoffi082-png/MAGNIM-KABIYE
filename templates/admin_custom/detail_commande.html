@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Commande {{ commande.numero }} — Admin KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <div class="col-lg-2">
+            <div class="admin-sidebar rounded-xl p-3 sticky-top" style="top:80px">
+                <div class="text-center mb-3 pt-2"><div class="brand-text text-kb-gold small">📚 Admin</div></div>
+                <nav class="nav flex-column gap-1">
+                    <a href="{% url 'dashboard_admin' %}" class="nav-link"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                    <a href="{% url 'admin_livres' %}" class="nav-link"><i class="bi bi-book me-2"></i>Livres</a>
+                    <a href="{% url 'admin_commandes' %}" class="nav-link active"><i class="bi bi-bag-check me-2"></i>Commandes</a>
+                    <a href="{% url 'admin_utilisateurs' %}" class="nav-link"><i class="bi bi-people me-2"></i>Utilisateurs</a>
+                    <a href="{% url 'admin_categories' %}" class="nav-link"><i class="bi bi-tags me-2"></i>Catégories</a>
+                    <a href="{% url 'admin_messages_contact' %}" class="nav-link"><i class="bi bi-envelope me-2"></i>Messages</a>
+                    <hr class="border-secondary">
+                    <a href="/admin/" class="nav-link"><i class="bi bi-gear me-2"></i>Admin Django</a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-10">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <a href="{% url 'admin_commandes' %}" class="btn btn-sm btn-outline-secondary">
+                    <i class="bi bi-arrow-left me-1"></i>Retour
+                </a>
+                <h4 class="section-title mb-0">Commande <code>{{ commande.numero }}</code></h4>
+                <span class="badge fs-6 badge-{{ commande.statut }} ms-2">{{ commande.statut_label }}</span>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <!-- Articles -->
+                    <div class="card border-0 shadow-sm rounded-xl p-4 mb-4">
+                        <h5 class="fw-bold mb-3">Articles commandés</h5>
+                        {% for ligne in commande.lignes.all %}
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div>
+                                <div class="fw-semibold">{{ ligne.titre_livre }}</div>
+                                <div class="text-muted small">{{ ligne.prix_unitaire }} FCFA × {{ ligne.quantite }}</div>
+                            </div>
+                            <span class="fw-bold">{{ ligne.sous_total }} FCFA</span>
+                        </div>
+                        {% endfor %}
+                        <div class="d-flex justify-content-between mt-3">
+                            <span>Frais de livraison</span>
+                            <span>{{ commande.frais_livraison }} FCFA</span>
+                        </div>
+                        <div class="d-flex justify-content-between mt-2 pt-2 border-top">
+                            <strong class="fs-5">Total</strong>
+                            <strong class="fs-5 text-kb-green">{{ commande.total }} FCFA</strong>
+                        </div>
+                    </div>
+
+                    <!-- Changer statut -->
+                    <div class="card border-0 shadow-sm rounded-xl p-4">
+                        <h5 class="fw-bold mb-3">Changer le statut</h5>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="d-flex gap-2 flex-wrap">
+                                {% for val, label in statut_choices %}
+                                <button type="submit" name="statut" value="{{ val }}"
+                                    class="btn {% if commande.statut == val %}btn-kb-primary{% else %}btn-outline-secondary{% endif %} btn-sm">
+                                    {{ label }}
+                                </button>
+                                {% endfor %}
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Client info -->
+                    <div class="card border-0 shadow-sm rounded-xl p-4 mb-3">
+                        <h5 class="fw-bold mb-3">Client</h5>
+                        <div class="mb-2 small"><span class="text-muted">Nom :</span> {{ commande.client.get_full_name }}</div>
+                        <div class="mb-2 small"><span class="text-muted">Email :</span> <a href="mailto:{{ commande.client.email }}">{{ commande.client.email }}</a></div>
+                        {% if commande.client.telephone %}
+                        <div class="mb-2 small"><span class="text-muted">Tél :</span> {{ commande.client.telephone }}</div>
+                        {% endif %}
+                        <div class="mb-2 small"><span class="text-muted">Date :</span> {{ commande.created_at|date:"d/m/Y à H:i" }}</div>
+                    </div>
+
+                    <!-- Livraison -->
+                    <div class="card border-0 shadow-sm rounded-xl p-4 mb-3">
+                        <h5 class="fw-bold mb-3">Livraison</h5>
+                        <div class="mb-2 small"><span class="text-muted">Adresse :</span> {{ commande.adresse_livraison }}</div>
+                        <div class="mb-2 small"><span class="text-muted">Ville :</span> {{ commande.ville_livraison }}</div>
+                        <div class="mb-2 small"><span class="text-muted">Pays :</span> {{ commande.pays_livraison }}</div>
+                        {% if commande.livraison %}
+                        <hr>
+                        <div class="mb-2 small"><span class="text-muted">Statut livraison :</span> {{ commande.livraison.get_statut_display }}</div>
+                        {% if commande.livraison.numero_suivi %}
+                        <div class="mb-2 small"><span class="text-muted">Suivi :</span> <code>{{ commande.livraison.numero_suivi }}</code></div>
+                        {% endif %}
+                        <a href="{% url 'suivi_livraison' commande.numero %}" class="btn btn-sm btn-outline-secondary w-100 mt-2" target="_blank">
+                            <i class="bi bi-truck me-1"></i>Voir le suivi
+                        </a>
+                        {% endif %}
+                    </div>
+
+                    {% if commande.paiement %}
+                    <div class="card border-0 shadow-sm rounded-xl p-4">
+                        <h5 class="fw-bold mb-3">Paiement</h5>
+                        <div class="mb-2 small"><span class="text-muted">Méthode :</span> {{ commande.paiement.get_methode_display }}</div>
+                        <div class="mb-2 small"><span class="text-muted">Référence :</span> <code>{{ commande.paiement.reference }}</code></div>
+                        <div class="mb-2 small"><span class="text-muted">Statut :</span> {{ commande.paiement.statut }}</div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

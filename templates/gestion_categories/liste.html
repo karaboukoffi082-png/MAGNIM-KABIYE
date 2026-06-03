@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Toutes les catégories — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active">Catégories</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="hero-section py-5 d-flex align-items-center" style="min-height:220px">
+    <div class="container">
+        <h1 class="hero-title">Nos Catégories</h1>
+        <p class="hero-subtitle">Explorez notre sélection de livres africains, kabiyè et togolais</p>
+    </div>
+</section>
+
+<div class="container py-5">
+    {% if categories %}
+    <div class="row g-4">
+        {% for cat in categories %}
+        <div class="col-md-4 col-lg-3">
+            <a href="{% url 'livres_par_categorie' cat.slug %}" class="text-decoration-none">
+                <div class="card border-0 shadow-sm rounded-xl p-4 h-100 text-center hover-lift transition">
+                    <div class="mb-3" style="font-size:3rem">
+                        <i class="bi {{ cat.icone }}" style="color:{{ cat.couleur|default:'#2d8a47' }}"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark mb-1">{{ cat.nom }}</h5>
+                    {% if cat.description %}
+                    <p class="text-muted small mb-2">{{ cat.description|truncatechars:80 }}</p>
+                    {% endif %}
+                    <div class="mt-auto">
+                        <span class="badge bg-light text-muted border">{{ cat.nombre_livres }} livre{{ cat.nombre_livres|pluralize }}</span>
+                    </div>
+
+                    {% if cat.sous_categories.all %}
+                    <div class="mt-3 pt-3 border-top">
+                        <div class="d-flex flex-wrap gap-1 justify-content-center">
+                            {% for sous in cat.sous_categories.all|slice:":4" %}
+                            <span class="badge bg-light text-dark border small">{{ sous.nom }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <span style="font-size:4rem">📚</span>
+        <h4 class="mt-3 text-muted">Aucune catégorie disponible</h4>
+        <a href="{% url 'boutique' %}" class="btn btn-kb-gold mt-3">Voir tous les livres</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

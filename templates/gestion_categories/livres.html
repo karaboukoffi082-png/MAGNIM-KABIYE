@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block title %}{{ categorie.nom }} — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'categories' %}">Catégories</a></li>
+                {% if categorie.parent %}
+                <li class="breadcrumb-item"><a href="{% url 'livres_par_categorie' categorie.parent.slug %}">{{ categorie.parent.nom }}</a></li>
+                {% endif %}
+                <li class="breadcrumb-item active">{{ categorie.nom }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<section class="hero-section py-4 d-flex align-items-center" style="min-height:200px">
+    <div class="container">
+        <div class="d-flex align-items-center gap-3">
+            <span style="font-size:3rem"><i class="bi {{ categorie.icone }}"></i></span>
+            <div>
+                <h1 class="hero-title mb-1">{{ categorie.nom }}</h1>
+                {% if categorie.description %}
+                <p class="hero-subtitle mb-0">{{ categorie.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% if categorie.sous_categories.all %}
+<div class="bg-white border-bottom py-3">
+    <div class="container">
+        <div class="d-flex gap-2 flex-wrap align-items-center">
+            <span class="text-muted small me-1">Sous-catégories :</span>
+            <a href="{% url 'livres_par_categorie' categorie.slug %}" class="btn btn-sm btn-kb-primary">Tous</a>
+            {% for sous in categorie.sous_categories.all %}
+            {% if sous.active %}
+            <a href="{% url 'livres_par_categorie' sous.slug %}" class="btn btn-sm btn-outline-secondary">{{ sous.nom }}</a>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h4 class="section-title mb-0">{{ total }} livre{{ total|pluralize }}</h4>
+        <form method="get" class="d-flex align-items-center gap-2">
+            <label class="small text-muted">Trier :</label>
+            <select name="tri" class="form-select form-select-sm" onchange="this.form.submit()">
+                <option value="-created_at" {% if request.GET.tri == '-created_at' or not request.GET.tri %}selected{% endif %}>Plus récents</option>
+                <option value="prix" {% if request.GET.tri == 'prix' %}selected{% endif %}>Prix ↑</option>
+                <option value="-prix" {% if request.GET.tri == '-prix' %}selected{% endif %}>Prix ↓</option>
+                <option value="titre" {% if request.GET.tri == 'titre' %}selected{% endif %}>Titre A–Z</option>
+            </select>
+        </form>
+    </div>
+
+    {% if livres %}
+    <div class="row g-3">
+        {% for livre in livres %}
+        <div class="col-6 col-md-4 col-lg-3">
+            <div class="book-card card h-100">
+                <a href="{% url 'detail_livre' livre.slug %}">
+                    <div class="card-img-wrapper">
+                        {% if livre.image_principale %}
+                        <img src="{{ livre.image_principale.url }}" alt="{{ livre.titre }}">
+                        {% else %}
+                        <span class="no-img-placeholder">📚</span>
+                        {% endif %}
+                        {% if livre.prix_promo %}
+                        <span class="badge-promo">Promo</span>
+                        {% endif %}
+                        {% if not livre.en_stock %}
+                        <span class="badge-promo" style="background:#666">Épuisé</span>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="card-body d-flex flex-column p-3">
+                    <h6 class="book-title mb-2">
+                        <a href="{% url 'detail_livre' livre.slug %}" class="text-dark text-decoration-none">{{ livre.titre|truncatechars:50 }}</a>
+                    </h6>
+                    <small class="text-muted mb-2">{{ livre.auteur }}</small>
+                    <div class="mt-auto">
+                        {% if livre.prix_promo %}
+                        <small class="book-price-promo d-block">{{ livre.prix }} FCFA</small>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-badge">{{ livre.prix_promo }} FCFA</span>
+                            <a href="{% url 'ajouter_au_panier' livre.id %}" class="btn btn-sm btn-outline-success rounded-circle p-1"><i class="bi bi-bag-plus"></i></a>
+                        </div>
+                        {% else %}
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="price-badge">{{ livre.prix }} FCFA</span>
+                            <a href="{% url 'ajouter_au_panier' livre.id %}" class="btn btn-sm btn-outline-success rounded-circle p-1"><i class="bi bi-bag-plus"></i></a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <span style="font-size:4rem">📚</span>
+        <h4 class="mt-3 text-muted">Aucun livre dans cette catégorie</h4>
+        <p class="text-muted">Revenez bientôt, nous enrichissons régulièrement notre catalogue.</p>
+        <a href="{% url 'boutique' %}" class="btn btn-kb-gold">Voir tous les livres</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

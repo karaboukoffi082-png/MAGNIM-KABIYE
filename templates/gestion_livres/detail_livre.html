@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ livre.titre }} — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'boutique' %}">Boutique</a></li>
+                <li class="breadcrumb-item active">{{ livre.titre|truncatechars:40 }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Image -->
+        <div class="col-lg-4">
+            <div class="text-center">
+                {% if livre.image_principale %}
+                <img src="{{ livre.image_principale.url }}" alt="{{ livre.titre }}" class="img-fluid rounded-xl shadow" style="max-height:450px;object-fit:cover">
+                {% else %}
+                <div class="bg-kb-cream rounded-xl p-5 text-center" style="height:350px;display:flex;align-items:center;justify-content:center">
+                    <span style="font-size:7rem;opacity:0.3">📚</span>
+                </div>
+                {% endif %}
+                {% if livre.images.all %}
+                <div class="d-flex gap-2 justify-content-center mt-3 flex-wrap">
+                    {% for img in livre.images.all %}
+                    <img src="{{ img.image.url }}" alt="" class="rounded" style="width:60px;height:60px;object-fit:cover;cursor:pointer;border:2px solid transparent" onclick="document.querySelector('.main-img').src=this.src">
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <!-- Format badges -->
+                <div class="d-flex gap-2 justify-content-center mt-3 flex-wrap">
+                    {% if livre.est_physique %}
+                    <span class="badge bg-kb-green px-3 py-2"><i class="bi bi-book me-1"></i>Livre physique</span>
+                    {% endif %}
+                    {% if livre.est_numerique %}
+                    <span class="badge bg-primary px-3 py-2"><i class="bi bi-file-earmark-pdf me-1"></i>PDF disponible</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Details -->
+        <div class="col-lg-8">
+            {% if livre.categorie %}
+            <span class="badge bg-light text-muted border mb-2">{{ livre.categorie.nom }}</span>
+            {% endif %}
+            <h1 class="h2 fw-bold mb-2">{{ livre.titre }}</h1>
+            <p class="text-muted fs-5 mb-3">par <strong>{{ livre.auteur }}</strong></p>
+
+            <!-- Rating -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <div class="star-rating">
+                    {% for i in "12345" %}
+                    {% if forloop.counter <= livre.note_moyenne %}
+                    <i class="bi bi-star-fill"></i>
+                    {% else %}
+                    <i class="bi bi-star"></i>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="text-muted small">({{ avis_list.count }} avis)</span>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-4">
+                {% if livre.prix_promo %}
+                <span class="text-muted text-decoration-line-through me-2 fs-5">{{ livre.prix }} FCFA</span>
+                <span class="fs-2 fw-bold text-kb-green">{{ livre.prix_promo }} FCFA</span>
+                {% else %}
+                <span class="fs-2 fw-bold text-kb-green">{{ livre.prix }} FCFA</span>
+                {% endif %}
+                {% if livre.est_numerique and livre.prix_pdf %}
+                <div class="mt-1">
+                    <span class="text-muted small"><i class="bi bi-file-earmark-pdf me-1"></i>Version PDF : </span>
+                    <span class="fw-semibold text-primary">{{ livre.prix_pdf }} FCFA</span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Stock (physique seulement) -->
+            {% if livre.est_physique %}
+            <div class="mb-4">
+                {% if livre.en_stock %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle p-2">
+                    <i class="bi bi-check-circle me-1"></i>En stock ({{ livre.quantite_stock }} disponibles)
+                </span>
+                {% else %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle p-2">
+                    <i class="bi bi-x-circle me-1"></i>Épuisé
+                </span>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Actions : Panier (physique) + PDF (numérique) -->
+            <div class="d-flex gap-3 mb-4 flex-wrap align-items-center">
+                {% if livre.est_physique and livre.en_stock %}
+                <a href="{% url 'ajouter_au_panier' livre.id %}" class="btn btn-kb-gold btn-lg px-4">
+                    <i class="bi bi-bag-plus me-2"></i>Ajouter au panier
+                </a>
+                {% elif livre.est_physique and not livre.en_stock %}
+                <button class="btn btn-secondary btn-lg px-4" disabled>
+                    <i class="bi bi-bag-x me-2"></i>Épuisé
+                </button>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    {% if livre.est_numerique and livre.fichier_pdf %}
+                        {% if user_peut_telecharger %}
+                        <a href="{% url 'telecharger_pdf' livre.slug %}" class="btn btn-primary btn-lg px-4">
+                            <i class="bi bi-download me-2"></i>Télécharger le PDF
+                        </a>
+                        {% else %}
+                        <a href="{% url 'ajouter_au_panier' livre.id %}" class="btn btn-outline-primary btn-lg px-4">
+                            <i class="bi bi-file-earmark-pdf me-2"></i>Acheter le PDF
+                            {% if livre.prix_pdf %}<span class="ms-1 small">({{ livre.prix_pdf }} FCFA)</span>{% endif %}
+                        </a>
+                        {% endif %}
+                    {% endif %}
+
+                    <a href="{% url 'toggle_favori' livre.slug %}" class="btn btn-outline-danger btn-lg px-3" title="Favoris">
+                        <i class="bi {% if user_favori %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
+                    </a>
+                {% else %}
+                    {% if livre.est_numerique and livre.fichier_pdf %}
+                    <a href="{% url 'connexion' %}" class="btn btn-outline-primary btn-lg px-4">
+                        <i class="bi bi-file-earmark-pdf me-2"></i>Connectez-vous pour acheter le PDF
+                    </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+
+            <!-- PDF info box -->
+            {% if livre.est_numerique and livre.fichier_pdf %}
+            <div class="alert border-0 rounded-xl d-flex align-items-start gap-3 mb-4"
+                 style="background:linear-gradient(135deg,#eff6ff,#dbeafe);border-left:4px solid #3b82f6 !important">
+                <i class="bi bi-file-earmark-pdf-fill text-primary fs-4 flex-shrink-0 mt-1"></i>
+                <div>
+                    <strong class="text-primary d-block mb-1">Version numérique disponible</strong>
+                    {% if user_peut_telecharger %}
+                    <span class="text-muted small">Vous avez accès au PDF. Cliquez sur "Télécharger le PDF" pour l'obtenir immédiatement.</span>
+                    {% else %}
+                    <span class="text-muted small">
+                        Achetez ce livre et recevez le PDF immédiatement après paiement.
+                        Téléchargement illimité, lecture sur tous vos appareils.
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Book Info -->
+            <div class="card border-0 bg-kb-cream rounded-xl p-3 mb-4">
+                <div class="row g-2 small">
+                    {% if livre.isbn %}
+                    <div class="col-6"><span class="text-muted">ISBN :</span> <strong>{{ livre.isbn }}</strong></div>
+                    {% endif %}
+                    {% if livre.langue %}
+                    <div class="col-6"><span class="text-muted">Langue :</span> <strong>{{ livre.langue.nom }}</strong></div>
+                    {% endif %}
+                    {% if livre.nombre_pages %}
+                    <div class="col-6"><span class="text-muted">Pages :</span> <strong>{{ livre.nombre_pages }}</strong></div>
+                    {% endif %}
+                    {% if livre.maison_edition %}
+                    <div class="col-6"><span class="text-muted">Éditeur :</span> <strong>{{ livre.maison_edition }}</strong></div>
+                    {% endif %}
+                    {% if livre.date_publication %}
+                    <div class="col-6"><span class="text-muted">Publié le :</span> <strong>{{ livre.date_publication|date:"d/m/Y" }}</strong></div>
+                    {% endif %}
+                    <div class="col-6"><span class="text-muted">Format :</span>
+                        <strong>
+                            {% if livre.type_vente == "physique" %}Physique{% elif livre.type_vente == "numerique" %}Numérique (PDF){% else %}Physique + PDF{% endif %}
+                        </strong>
+                    </div>
+                </div>
+            </div>
+
+            <h5 class="fw-semibold">Description</h5>
+            <p class="text-muted">{{ livre.description }}</p>
+        </div>
+    </div>
+
+    <!-- Reviews -->
+    <div class="row mt-5">
+        <div class="col-lg-8">
+            <h4 class="section-title mb-4">Avis des lecteurs</h4>
+
+            {% if avis_list %}
+            {% for avis in avis_list %}
+            <div class="card border-0 bg-light rounded-xl p-3 mb-3">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <strong>{{ avis.auteur.get_full_name|default:avis.auteur.username }}</strong>
+                    <div class="star-rating">
+                        {% for i in "12345" %}
+                        {% if forloop.counter <= avis.note %}
+                        <i class="bi bi-star-fill"></i>
+                        {% else %}
+                        <i class="bi bi-star"></i>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+                <p class="text-muted small mb-0">{{ avis.commentaire }}</p>
+                <small class="text-muted">{{ avis.created_at|date:"d/m/Y" }}</small>
+            </div>
+            {% endfor %}
+            {% else %}
+            <p class="text-muted">Soyez le premier à donner votre avis sur ce livre.</p>
+            {% endif %}
+
+            <!-- Add review form -->
+            {% if user.is_authenticated and not user_a_deja_note %}
+            <div class="card border-0 shadow-sm rounded-xl p-4 mt-4">
+                <h5 class="fw-semibold mb-3">Laisser un avis</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Note</label>
+                        <select name="note" class="form-select" required>
+                            <option value="">Sélectionner une note</option>
+                            <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+                            <option value="4">⭐⭐⭐⭐ Très bien</option>
+                            <option value="3">⭐⭐⭐ Bien</option>
+                            <option value="2">⭐⭐ Passable</option>
+                            <option value="1">⭐ Mauvais</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold small">Commentaire</label>
+                        <textarea name="commentaire" class="form-control" rows="4" placeholder="Partagez votre avis..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-kb-primary">Publier mon avis</button>
+                </form>
+            </div>
+            {% elif not user.is_authenticated %}
+            <div class="alert alert-info border-0 rounded-xl">
+                <a href="{% url 'connexion' %}">Connectez-vous</a> pour laisser un avis.
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Similar Books -->
+        {% if livres_similaires %}
+        <div class="col-lg-4">
+            <h5 class="fw-semibold mb-3">Livres similaires</h5>
+            {% for similar in livres_similaires %}
+            <div class="d-flex gap-3 mb-3 align-items-center">
+                <a href="{% url 'detail_livre' similar.slug %}">
+                    {% if similar.image_principale %}
+                    <img src="{{ similar.image_principale.url }}" class="rounded" style="width:60px;height:80px;object-fit:cover">
+                    {% else %}
+                    <div class="bg-kb-cream rounded d-flex align-items-center justify-content-center" style="width:60px;height:80px">📚</div>
+                    {% endif %}
+                </a>
+                <div>
+                    <a href="{% url 'detail_livre' similar.slug %}" class="text-dark text-decoration-none fw-semibold small">{{ similar.titre|truncatechars:40 }}</a>
+                    <div class="text-muted small">{{ similar.auteur }}</div>
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        <span class="text-kb-green fw-bold small">{{ similar.prix_actuel }} FCFA</span>
+                        {% if similar.est_numerique %}
+                        <span class="badge bg-primary-subtle text-primary" style="font-size:0.65rem"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

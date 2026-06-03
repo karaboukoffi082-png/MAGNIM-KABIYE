@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block title %}Suivi livraison — Commande {{ livraison.commande.numero }}{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'mes_commandes' %}">Mes commandes</a></li>
+                <li class="breadcrumb-item active">Suivi livraison</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row g-4">
+        <!-- Infos livraison -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-xl p-4 mb-4">
+                <h5 class="fw-bold mb-3">📦 Informations livraison</h5>
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Commande</div>
+                    <code class="fs-6">{{ livraison.commande.numero }}</code>
+                </div>
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Transporteur</div>
+                    <strong>{{ livraison.transporteur|default:"KabiyèBooks Express" }}</strong>
+                </div>
+                {% if livraison.numero_suivi %}
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Numéro de suivi</div>
+                    <code>{{ livraison.numero_suivi }}</code>
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Type</div>
+                    <span>{{ livraison.get_type_livraison_display }}</span>
+                </div>
+                {% if livraison.date_livraison_prevue %}
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Livraison prévue</div>
+                    <strong>{{ livraison.date_livraison_prevue|date:"d F Y" }}</strong>
+                </div>
+                {% endif %}
+                {% if livraison.date_livraison_reelle %}
+                <div class="mb-3">
+                    <div class="small text-muted mb-1">Livrée le</div>
+                    <strong class="text-success">{{ livraison.date_livraison_reelle|date:"d F Y à H:i" }}</strong>
+                </div>
+                {% endif %}
+                {% if livraison.notes %}
+                <div class="alert alert-info small mt-3 p-2">
+                    <i class="bi bi-info-circle me-1"></i>{{ livraison.notes }}
+                </div>
+                {% endif %}
+            </div>
+
+            <a href="{% url 'detail_commande' livraison.commande.numero %}" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-left me-2"></i>Retour à la commande
+            </a>
+        </div>
+
+        <!-- Timeline -->
+        <div class="col-lg-8">
+            <!-- Barre de progression -->
+            <div class="card border-0 shadow-sm rounded-xl p-4 mb-4">
+                <h5 class="fw-bold mb-4">Progression</h5>
+                {% with prog=livraison.progression %}
+                <div class="progress mb-3" style="height:12px;border-radius:10px">
+                    <div class="progress-bar bg-success" style="width:{{ prog }}%;border-radius:10px" role="progressbar">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between small text-muted">
+                    <span>Commande</span>
+                    <span>Préparation</span>
+                    <span>Expédition</span>
+                    <span>Transit</span>
+                    <span>Livraison</span>
+                    <span>✅ Livré</span>
+                </div>
+                {% endwith %}
+
+                <div class="text-center mt-4">
+                    <span class="badge fs-6 px-3 py-2
+                        {% if livraison.statut == 'livree' %}bg-success
+                        {% elif livraison.statut == 'echec' %}bg-danger
+                        {% elif livraison.statut == 'en_livraison' %}bg-warning text-dark
+                        {% else %}bg-kb-primary{% endif %}">
+                        {{ livraison.get_statut_display }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Événements timeline -->
+            <div class="card border-0 shadow-sm rounded-xl p-4">
+                <h5 class="fw-bold mb-4">Historique de livraison</h5>
+
+                {% if evenements %}
+                <div class="timeline">
+                    {% for evt in evenements %}
+                    <div class="timeline-item d-flex gap-3 mb-4">
+                        <div class="timeline-icon flex-shrink-0">
+                            <div class="rounded-circle d-flex align-items-center justify-content-center
+                                {% if forloop.first %}bg-kb-green text-white{% else %}bg-light border{% endif %}"
+                                style="width:40px;height:40px;font-size:1rem">
+                                <i class="bi {{ evt.icone|default:'bi-circle-fill' }} {% if forloop.first %}{% else %}text-muted{% endif %}"></i>
+                            </div>
+                            {% if not forloop.last %}
+                            <div class="border-start ms-3 mt-1" style="height:40px;border-color:#dee2e6!important"></div>
+                            {% endif %}
+                        </div>
+                        <div class="flex-grow-1 pb-2">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="fw-semibold">{{ evt.get_statut_display }}</span>
+                                    {% if evt.lieu %}
+                                    <span class="text-muted small ms-2"><i class="bi bi-geo-alt"></i> {{ evt.lieu }}</span>
+                                    {% endif %}
+                                </div>
+                                <span class="text-muted small text-nowrap ms-2">{{ evt.date|date:"d/m/Y H:i" }}</span>
+                            </div>
+                            <p class="text-muted small mb-0 mt-1">{{ evt.description }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="bi bi-clock-history fs-1 text-muted opacity-50"></i>
+                    <p class="text-muted mt-3">Aucun événement de livraison enregistré pour l'instant.<br>
+                    <small>Le suivi sera mis à jour dès que votre colis sera pris en charge.</small></p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

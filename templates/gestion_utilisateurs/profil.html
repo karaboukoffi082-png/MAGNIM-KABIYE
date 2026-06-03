@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Mon Profil — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4">
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-xl p-3">
+                <div class="text-center py-3">
+                    {% if user.photo_profil %}
+                    <img src="{{ user.photo_profil.url }}" class="rounded-circle mb-3" width="80" height="80" style="object-fit:cover">
+                    {% else %}
+                    <div class="avatar-circle mx-auto mb-3" style="width:80px;height:80px;font-size:2rem;background:var(--kb-green)">
+                        {{ user.get_short_name|first|upper }}
+                    </div>
+                    {% endif %}
+                    <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
+                </div>
+                <hr>
+                <nav class="nav flex-column gap-1">
+                    <a href="{% url 'tableau_de_bord' %}" class="nav-link px-3 py-2 rounded-3 text-dark"><i class="bi bi-grid me-2"></i>Tableau de bord</a>
+                    <a href="{% url 'profil' %}" class="nav-link px-3 py-2 rounded-3 active bg-light text-dark"><i class="bi bi-person me-2"></i>Mon profil</a>
+                    <a href="{% url 'mes_commandes' %}" class="nav-link px-3 py-2 rounded-3 text-dark"><i class="bi bi-bag-check me-2"></i>Mes commandes</a>
+                    <a href="{% url 'mes_favoris' %}" class="nav-link px-3 py-2 rounded-3 text-dark"><i class="bi bi-heart me-2"></i>Mes favoris</a>
+                </nav>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="card border-0 shadow-sm rounded-xl p-4">
+                <h5 class="fw-bold mb-4">Modifier mon profil</h5>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-kb-primary px-4">Sauvegarder</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

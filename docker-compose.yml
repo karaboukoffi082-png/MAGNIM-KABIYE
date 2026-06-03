@@ -1,0 +1,52 @@
+services:
+  postgres-db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: centremagnim
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: KARa@40bou
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - kabiye-net
+
+  web-app:
+    image: python:3.11-slim
+    command: >
+      sh -c "pip install --no-cache-dir -r requirements.txt &&
+             python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             gunicorn kabiye_books.wsgi:application --bind 0.0.0.0:8000"
+    environment:
+      - SECRET_KEY=u49lvqEsH5hTNlBcq7cuAq7yoXdgRjww35qxrn-sFrcugL2K6QyuqhV6vphkKD6L-IA
+      - DEBUG=False
+      - ALLOWED_HOSTS=76.13.50.224,centremagnim.com,www.centremagnim.com
+      - DB_NAME=centremagnim
+      - DB_USER=postgres
+      - DB_PASSWORD=KARa@40bou
+      - DB_HOST=postgres-db
+      - DB_PORT=5432
+      - CLOUDINARY_CLOUD_NAME=ton_cloud_name
+      - CLOUDINARY_API_KEY=ta_cle_api_cloudinary
+      - CLOUDINARY_API_SECRET=ton_secret_api_cloudinary
+    networks:
+      - kabiye-net
+      - dokploy-network
+    depends_on:
+      - postgres-db
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=dokploy-network"
+      - "traefik.http.routers.kabiye-books.rule=Host(`centremagnim.com`) || Host(`www.centremagnim.com`)"
+      - "traefik.http.routers.kabiye-books.entrypoints=web"
+      - "traefik.http.services.kabiye-books.loadbalancer.server.port=8000"
+
+volumes:
+  postgres_data:
+
+networks:
+  kabiye-net:
+    driver: overlay
+    attachable: true
+  dokploy-network:
+    external: true

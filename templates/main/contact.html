@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Contact — KabiyèBooks{% endblock %}
+
+{% block content %}
+<section class="hero-section py-5 d-flex align-items-center" style="min-height:250px">
+    <div class="container">
+        <h1 class="hero-title">Contactez-nous</h1>
+        <p class="hero-subtitle">Nous sommes là pour vous aider</p>
+    </div>
+</section>
+<div class="container py-5">
+    <div class="row g-5">
+        <div class="col-lg-5">
+            <h4 class="section-title mb-4">Nos coordonnées</h4>
+            <div class="d-flex gap-3 mb-3 align-items-start">
+                <div class="text-kb-gold fs-4">📍</div>
+                <div>
+                    <strong>Adresse</strong>
+                    <p class="text-muted small mb-0">Lomé, Togo</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3 mb-3 align-items-start">
+                <div class="text-kb-gold fs-4">📱</div>
+                <div>
+                    <strong>Téléphone / WhatsApp</strong>
+                    <p class="text-muted small mb-0">+228 70 76 60 60</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3 mb-3 align-items-start">
+                <div class="text-kb-gold fs-4">✉️</div>
+                <div>
+                    <strong>Email</strong>
+                    <p class="text-muted small mb-0">centremagnim@gmail.com</p>
+                </div>
+            </div>
+            <div class="d-flex gap-3 mb-3 align-items-start">
+                <div class="text-kb-gold fs-4">🕐</div>
+                <div>
+                    <strong>Horaires</strong>
+                    <p class="text-muted small mb-0">Lun–Sam : 8h–18h (GMT+0)</p>
+                </div>
+            </div>
+
+            <div class="card border-0 bg-kb-cream rounded-xl p-3 mt-4">
+                <h6 class="fw-semibold mb-2">💬 Réponse rapide</h6>
+                <p class="small text-muted mb-0">Nous répondons généralement dans les <strong>24 heures</strong> ouvrables. Pour les urgences, contactez-nous via WhatsApp.</p>
+            </div>
+        </div>
+
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm rounded-xl p-4">
+                <h5 class="fw-bold mb-3">Envoyer un message</h5>
+                <form method="post" action="{% url 'contact' %}">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Nom complet *</label>
+                            <input type="text" name="nom" class="form-control" placeholder="Votre nom" required value="{{ request.POST.nom }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label small fw-semibold">Email *</label>
+                            <input type="email" name="email" class="form-control" placeholder="votre@email.com" required value="{{ request.POST.email }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Sujet *</label>
+                            <input type="text" name="sujet" class="form-control" placeholder="Sujet de votre message" required value="{{ request.POST.sujet }}">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-semibold">Message *</label>
+                            <textarea class="form-control" name="message" rows="6" placeholder="Votre message..." required>{{ request.POST.message }}</textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-kb-gold px-5 fw-semibold">
+                                <i class="bi bi-send me-2"></i>Envoyer le message
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

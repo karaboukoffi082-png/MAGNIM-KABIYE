@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% if titre_page %}{{ titre_page }}{% else %}Boutique{% endif %} — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active">{% if titre_page %}{{ titre_page }}{% else %}Boutique{% endif %}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        <!-- Sidebar Filters -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm rounded-xl p-3 sticky-top" style="top: 80px">
+                <h6 class="fw-bold mb-3">🔍 Filtres</h6>
+                <form method="get" action="{% url 'boutique' %}">
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Recherche</label>
+                        <input type="text" name="q" class="form-control form-control-sm" placeholder="Titre, auteur..." value="{{ request.GET.q }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Catégorie</label>
+                        <select name="categorie" class="form-select form-select-sm">
+                            <option value="">Toutes</option>
+                            {% for cat in categories %}
+                            <option value="{{ cat.slug }}" {% if request.GET.categorie == cat.slug %}selected{% endif %}>{{ cat.nom }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Prix max (FCFA)</label>
+                        <input type="number" name="prix_max" class="form-control form-control-sm" placeholder="ex: 10000" value="{{ request.GET.prix_max }}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-semibold">Trier par</label>
+                        <select name="tri" class="form-select form-select-sm">
+                            <option value="-created_at" {% if request.GET.tri == '-created_at' %}selected{% endif %}>Plus récents</option>
+                            <option value="prix" {% if request.GET.tri == 'prix' %}selected{% endif %}>Prix croissant</option>
+                            <option value="-prix" {% if request.GET.tri == '-prix' %}selected{% endif %}>Prix décroissant</option>
+                            <option value="titre" {% if request.GET.tri == 'titre' %}selected{% endif %}>Titre A-Z</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-sm btn-kb-primary w-100">Appliquer</button>
+                    <a href="{% url 'boutique' %}" class="btn btn-sm btn-outline-secondary w-100 mt-2">Réinitialiser</a>
+                </form>
+            </div>
+        </div>
+
+        <!-- Books Grid -->
+        <div class="col-lg-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="section-title mb-0">{% if titre_page %}{{ titre_page }}{% else %}Tous les livres{% endif %}</h4>
+                <span class="text-muted small">{{ total_resultats }} livre{{ total_resultats|pluralize }}</span>
+            </div>
+
+            {% if livres %}
+            <div class="row g-3">
+                {% for livre in livres %}
+                <div class="col-6 col-md-4 col-xl-3">
+                    <div class="book-card card h-100">
+                        <a href="{% url 'detail_livre' livre.slug %}">
+                            <div class="card-img-wrapper">
+                                {% if livre.image_principale %}
+                                <img src="{{ livre.image_principale.url }}" alt="{{ livre.titre }}">
+                                {% else %}
+                                <span class="no-img-placeholder">📚</span>
+                                {% endif %}
+                                {% if livre.prix_promo %}
+                                <span class="badge-promo">Promo</span>
+                                {% endif %}
+                                {% if not livre.en_stock %}
+                                <span class="badge-promo" style="background:#666">Épuisé</span>
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="card-body d-flex flex-column p-3">
+                            <p class="book-author mb-1">{{ livre.auteur }}</p>
+                            <h6 class="book-title mb-2">
+                                <a href="{% url 'detail_livre' livre.slug %}" class="text-dark text-decoration-none">{{ livre.titre }}</a>
+                            </h6>
+                            {% if livre.categorie %}
+                            <span class="badge bg-light text-muted border small mb-2">{{ livre.categorie.nom }}</span>
+                            {% endif %}
+                            <div class="mt-auto d-flex justify-content-between align-items-center">
+                                <div>
+                                    {% if livre.prix_promo %}
+                                    <small class="book-price-promo d-block">{{ livre.prix }} FCFA</small>
+                                    <span class="price-badge">{{ livre.prix_promo }} FCFA</span>
+                                    {% else %}
+                                    <span class="price-badge">{{ livre.prix }} FCFA</span>
+                                    {% endif %}
+                                </div>
+                                {% if livre.en_stock %}
+                                <a href="{% url 'ajouter_au_panier' livre.id %}" class="btn btn-sm btn-outline-success rounded-circle p-1" title="Ajouter au panier">
+                                    <i class="bi bi-bag-plus"></i>
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Pagination -->
+            {% if livres.has_other_pages %}
+            <nav class="mt-5">
+                <ul class="pagination justify-content-center">
+                    {% if livres.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ livres.previous_page_number }}&{{ request.GET.urlencode }}">
+                            <i class="bi bi-chevron-left"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% for num in livres.paginator.page_range %}
+                    <li class="page-item {% if livres.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}&{{ request.GET.urlencode }}">{{ num }}</a>
+                    </li>
+                    {% endfor %}
+                    {% if livres.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ livres.next_page_number }}&{{ request.GET.urlencode }}">
+                            <i class="bi bi-chevron-right"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+
+            {% else %}
+            <div class="text-center py-5">
+                <span style="font-size:5rem">🔍</span>
+                <h4 class="mt-3">Aucun livre trouvé</h4>
+                <p class="text-muted">Essayez d'autres critères de recherche.</p>
+                <a href="{% url 'boutique' %}" class="btn btn-kb-primary">Voir tous les livres</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

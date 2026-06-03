@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}Paiement confirmé — {{ commande.numero }}{% endblock %}
+
+{% block extra_css %}
+<style>
+  @keyframes bounceIn {
+    0%   { transform: scale(.3); opacity: 0; }
+    50%  { transform: scale(1.05); }
+    70%  { transform: scale(.9); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .success-icon { animation: bounceIn .7s ease forwards; }
+
+  @keyframes confettiFall {
+    0%   { top: -10px; opacity: 1; }
+    100% { top: 100vh; opacity: 0; }
+  }
+  .confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    animation: confettiFall linear forwards;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-xl-5 text-center">
+
+      <!-- Icône succès animée -->
+      <div class="success-icon mb-4">
+        <div style="width:120px;height:120px;background:linear-gradient(135deg,#28a745,#1a5c2a);
+                    border-radius:50%;display:flex;align-items:center;justify-content:center;
+                    margin:0 auto;box-shadow:0 8px 30px rgba(40,167,69,.35)">
+          <i class="bi bi-check-lg text-white" style="font-size:3.5rem"></i>
+        </div>
+      </div>
+
+      <h2 class="fw-bold text-success mb-2">Paiement confirmé !</h2>
+      <p class="text-muted fs-5 mb-4">
+        Merci pour votre commande. Votre paiement a été traité avec succès.
+      </p>
+
+      <!-- Récapitulatif -->
+      <div class="card border-0 shadow-sm rounded-4 mb-4 text-start">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3 text-muted text-uppercase small" style="letter-spacing:.08em">
+            Récapitulatif du paiement
+          </h6>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="small text-muted">Commande</div>
+              <div class="fw-bold">{{ commande.numero }}</div>
+            </div>
+            <div class="col-6">
+              <div class="small text-muted">Montant payé</div>
+              <div class="fw-bold text-success fs-5">{{ paiement.montant|floatformat:0 }} FCFA</div>
+            </div>
+            <div class="col-6">
+              <div class="small text-muted">Mode de paiement</div>
+              <div class="fw-bold">{{ paiement.get_methode_display }}</div>
+            </div>
+            <div class="col-6">
+              <div class="small text-muted">Statut</div>
+              <span class="badge bg-success">{{ paiement.get_statut_display }}</span>
+            </div>
+            {% if paiement.reference %}
+            <div class="col-12">
+              <div class="small text-muted">Référence de paiement</div>
+              <code class="fs-6 text-kb-green fw-bold">{{ paiement.reference }}</code>
+            </div>
+            {% endif %}
+            {% if paiement.telephone %}
+            <div class="col-6">
+              <div class="small text-muted">Téléphone</div>
+              <div class="fw-bold">+228 {{ paiement.telephone }}</div>
+            </div>
+            {% endif %}
+            <div class="col-6">
+              <div class="small text-muted">Date</div>
+              <div class="fw-bold">{{ paiement.updated_at|date:"d/m/Y à H:i" }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Articles commandés -->
+      {% if commande.lignes.count %}
+      <div class="card border-0 shadow-sm rounded-4 mb-4 text-start">
+        <div class="card-body p-4">
+          <h6 class="fw-bold mb-3 text-muted text-uppercase small" style="letter-spacing:.08em">
+            Articles commandés
+          </h6>
+          {% for ligne in commande.lignes.all %}
+          <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}border-bottom pb-2 mb-2{% endif %}">
+            <div>
+              <div class="fw-semibold small">{{ ligne.titre_livre }}</div>
+              <div class="text-muted" style="font-size:.8rem">× {{ ligne.quantite }}</div>
+            </div>
+            <div class="fw-bold small">{{ ligne.sous_total|floatformat:0 }} FCFA</div>
+          </div>
+          {% endfor %}
+          {% if commande.frais_livraison %}
+          <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
+            <span class="small text-muted">Frais de livraison</span>
+            <span class="small">{{ commande.frais_livraison|floatformat:0 }} FCFA</span>
+          </div>
+          {% endif %}
+          <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-2">
+            <span class="fw-bold">Total</span>
+            <span class="fw-bold text-success">{{ commande.total|floatformat:0 }} FCFA</span>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Prochaines étapes -->
+      <div class="card border-0 rounded-4 mb-5" style="background:linear-gradient(135deg,#f8f9fa,#e9ecef)">
+        <div class="card-body p-4 text-start">
+          <h6 class="fw-bold mb-3"><i class="bi bi-list-check me-2 text-kb-green"></i>Prochaines étapes</h6>
+          <div class="d-flex align-items-start mb-2">
+            <span class="badge bg-success rounded-circle me-2 mt-1" style="width:20px;height:20px;font-size:.7rem;display:flex;align-items:center;justify-content:center">1</span>
+            <span class="small">Votre commande est en cours de <strong>préparation</strong>.</span>
+          </div>
+          <div class="d-flex align-items-start mb-2">
+            <span class="badge bg-secondary rounded-circle me-2 mt-1" style="width:20px;height:20px;font-size:.7rem;display:flex;align-items:center;justify-content:center">2</span>
+            <span class="small">Vous recevrez une <strong>notification</strong> quand votre colis est expédié.</span>
+          </div>
+          <div class="d-flex align-items-start">
+            <span class="badge bg-secondary rounded-circle me-2 mt-1" style="width:20px;height:20px;font-size:.7rem;display:flex;align-items:center;justify-content:center">3</span>
+            <span class="small"><strong>Livraison</strong> à {{ commande.ville_livraison }} — {{ commande.pays_livraison }}.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="{% url 'detail_commande' commande.numero %}" class="btn btn-kb-gold px-4">
+          <i class="bi bi-receipt me-2"></i>Voir ma commande
+        </a>
+        <a href="{% url 'boutique' %}" class="btn btn-outline-secondary px-4">
+          <i class="bi bi-shop me-2"></i>Continuer mes achats
+        </a>
+        <a href="{% url 'tableau_de_bord' %}" class="btn btn-outline-secondary px-4">
+          <i class="bi bi-grid me-2"></i>Mon tableau de bord
+        </a>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Petits confettis de célébration
+(function () {
+  const couleurs = ['#2d8a47','#c8a84b','#1a5c2a','#ffc107','#28a745','#198754'];
+  for (let i = 0; i < 60; i++) {
+    const piece = document.createElement('div');
+    piece.className = 'confetti-piece';
+    piece.style.left = Math.random() * 100 + 'vw';
+    piece.style.background = couleurs[Math.floor(Math.random() * couleurs.length)];
+    piece.style.animationDuration = (Math.random() * 3 + 2) + 's';
+    piece.style.animationDelay = (Math.random() * 1.5) + 's';
+    piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+    piece.style.width = (Math.random() * 8 + 6) + 'px';
+    piece.style.height = (Math.random() * 8 + 6) + 'px';
+    document.body.appendChild(piece);
+    setTimeout(function () { piece.remove(); }, 6000);
+  }
+})();
+</script>
+{% endblock %}

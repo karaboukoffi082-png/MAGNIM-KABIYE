@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Conditions Générales d'Utilisation — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item active">Conditions générales</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-5">
+                <div style="font-size:3rem">📋</div>
+                <h1 class="h2 fw-bold mb-2">Conditions Générales d'Utilisation</h1>
+                <p class="text-muted">Dernière mise à jour : Mai 2026</p>
+                <div class="mx-auto rounded" style="width:60px;height:4px;background:var(--kb-gold)"></div>
+            </div>
+
+            <div class="text-muted" style="line-height:1.8">
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">1. Présentation</h5>
+                    <p>
+                        KabiyèBooks est une librairie en ligne spécialisée dans les livres kabiyè, togolais et africains,
+                        exploitée sous la marque <strong>MAGNIM</strong> par la boutique <strong>Centremagnim</strong>,
+                        située à Lomé, Togo. En utilisant cette plateforme, vous acceptez les présentes conditions.
+                    </p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">2. Inscription et compte utilisateur</h5>
+                    <ul>
+                        <li>L'inscription est gratuite et ouverte à toute personne majeure</li>
+                        <li>Vous êtes responsable de la confidentialité de votre mot de passe</li>
+                        <li>Toute activité via votre compte vous est imputable</li>
+                        <li>KabiyèBooks se réserve le droit de suspendre tout compte en cas d'abus</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">3. Commandes et paiement</h5>
+                    <ul>
+                        <li><strong>Toute commande nécessite un paiement validé</strong> avant traitement ou livraison</li>
+                        <li>Les prix sont indiqués en Francs CFA (FCFA) TTC</li>
+                        <li>La commande est confirmée uniquement après validation du paiement par l'opérateur</li>
+                        <li>En cas d'erreur de prix évidente, KabiyèBooks se réserve le droit d'annuler la commande</li>
+                        <li>Les frais de livraison sont indiqués lors du passage de commande</li>
+                    </ul>
+                    <div class="alert alert-warning border-0 rounded mt-2">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Aucun accès aux livres (physiques ou numériques) sans paiement préalable confirmé.</strong>
+                    </div>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">4. Livres numériques (PDF)</h5>
+                    <ul>
+                        <li>L'achat d'un livre numérique vous accorde une <strong>licence personnelle non-transférable</strong></li>
+                        <li>Le PDF est accessible immédiatement après validation du paiement</li>
+                        <li>Les téléchargements sont illimités pour l'acheteur</li>
+                        <li><strong>Il est strictement interdit</strong> de partager, revendre ou redistribuer le fichier PDF</li>
+                        <li>Toute reproduction commerciale est soumise à autorisation expresse de l'éditeur</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">5. Livraison des livres physiques</h5>
+                    <ul>
+                        <li>Les livres physiques sont expédiés après confirmation du paiement</li>
+                        <li>Les délais indiqués sont indicatifs et peuvent varier</li>
+                        <li>KabiyèBooks n'est pas responsable des retards dus aux transporteurs</li>
+                        <li>En cas de colis endommagé, signalez-le sous 48h par e-mail</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">6. Retours et remboursements</h5>
+                    <ul>
+                        <li><strong>Livres physiques :</strong> retour accepté sous 7 jours si le livre est en parfait état</li>
+                        <li><strong>Livres numériques :</strong> aucun remboursement après téléchargement du PDF</li>
+                        <li>Les frais de retour sont à la charge du client sauf erreur de notre part</li>
+                        <li>Contactez-nous à <strong>centremagnim@gmail.com</strong> pour initier un retour</li>
+                    </ul>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">7. Propriété intellectuelle</h5>
+                    <p>
+                        Tous les contenus de KabiyèBooks (textes, images, logo MAGNIM, design) sont la propriété
+                        exclusive de KabiyèBooks/Centremagnim. Toute reproduction sans autorisation écrite préalable est interdite.
+                        Les livres vendus sont protégés par le droit d'auteur de leurs éditeurs respectifs.
+                    </p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">8. Limitation de responsabilité</h5>
+                    <p>
+                        KabiyèBooks s'efforce de maintenir la plateforme accessible mais ne peut garantir
+                        une disponibilité ininterrompue. Nous déclinons toute responsabilité pour les
+                        interruptions de service indépendantes de notre volonté.
+                    </p>
+                </div>
+
+                <div class="card border-0 bg-light rounded-xl p-4 mb-4">
+                    <h5 class="fw-bold text-dark mb-3">9. Droit applicable</h5>
+                    <p>
+                        Les présentes conditions sont régies par le droit togolais. En cas de litige,
+                        et à défaut de résolution amiable, le tribunal compétent de Lomé sera saisi.
+                    </p>
+                </div>
+
+                <div class="card border-0 rounded-xl p-4 text-center" style="background:linear-gradient(135deg,#faf7f2,#fff8e7)">
+                    <i class="bi bi-envelope fs-2 mb-2" style="color:var(--kb-gold)"></i>
+                    <h6 class="fw-bold">Des questions sur nos conditions ?</h6>
+                    <p class="text-muted small mb-3">centremagnim@gmail.com · +228 70 76 60 60</p>
+                    <a href="{% url 'contact' %}" class="btn btn-warning">Nous contacter</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

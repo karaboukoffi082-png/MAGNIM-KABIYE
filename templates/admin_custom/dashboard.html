@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="row g-4">
+        <!-- Sidebar -->
+        <div class="col-lg-2">
+            <div class="admin-sidebar rounded-xl p-3 sticky-top" style="top:80px">
+                <div class="text-center mb-3 pt-2">
+                    <div class="brand-text text-kb-gold small">📚 Admin</div>
+                </div>
+                <nav class="nav flex-column gap-1">
+                    <a href="{% url 'dashboard_admin' %}" class="nav-link active"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a>
+                    <a href="{% url 'admin_livres' %}" class="nav-link"><i class="bi bi-book me-2"></i>Livres</a>
+                    <a href="{% url 'admin_commandes' %}" class="nav-link"><i class="bi bi-bag-check me-2"></i>Commandes</a>
+                    <a href="{% url 'admin_utilisateurs' %}" class="nav-link"><i class="bi bi-people me-2"></i>Utilisateurs</a>
+                    <hr class="border-secondary">
+                    <a href="/admin/" class="nav-link"><i class="bi bi-gear me-2"></i>Admin Django</a>
+                    <a href="{% url 'accueil' %}" class="nav-link"><i class="bi bi-house me-2"></i>Boutique</a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div class="col-lg-10">
+            <h4 class="section-title mb-4">Tableau de bord</h4>
+
+            <!-- Stats -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3">
+                    <div class="stat-card bg-kb-green text-white">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="stat-value">{{ total_ventes|floatformat:0 }}</div>
+                                <div class="stat-label text-white-50">FCFA de ventes</div>
+                            </div>
+                            <div class="stat-icon bg-white bg-opacity-10">💰</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card" style="background:var(--kb-gold)">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="stat-value">{{ commandes_mois }}</div>
+                                <div class="stat-label">Commandes ce mois</div>
+                            </div>
+                            <div class="stat-icon bg-dark bg-opacity-10">📦</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card bg-kb-cream">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="stat-value">{{ total_livres }}</div>
+                                <div class="stat-label text-muted">Livres en catalogue</div>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(0,0,0,0.06)">📚</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="stat-card" style="background:#e8f4fd">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <div class="stat-value">{{ total_utilisateurs }}</div>
+                                <div class="stat-label text-muted">Utilisateurs</div>
+                            </div>
+                            <div class="stat-icon" style="background:rgba(0,0,0,0.06)">👥</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Recent Orders -->
+                <div class="col-lg-8">
+                    <div class="card border-0 shadow-sm rounded-xl">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h5 class="fw-bold mb-0">Commandes récentes</h5>
+                                <a href="{% url 'admin_commandes' %}" class="btn btn-sm btn-outline-secondary">Voir tout</a>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Numéro</th>
+                                            <th>Client</th>
+                                            <th>Statut</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for cmd in commandes_recentes %}
+                                        <tr>
+                                            <td><a href="{% url 'detail_commande' cmd.numero %}" class="text-decoration-none"><code>{{ cmd.numero }}</code></a></td>
+                                            <td>{{ cmd.client.get_full_name|default:cmd.client.username }}</td>
+                                            <td><span class="badge badge-{{ cmd.statut }}">{{ cmd.statut_label }}</span></td>
+                                            <td class="fw-semibold">{{ cmd.total }} FCFA</td>
+                                            <td class="text-muted small">{{ cmd.created_at|date:"d/m/Y" }}</td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr><td colspan="5" class="text-center text-muted py-4">Aucune commande</td></tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column -->
+                <div class="col-lg-4">
+                    <!-- Order Status -->
+                    <div class="card border-0 shadow-sm rounded-xl mb-3">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">Statuts des commandes</h6>
+                            {% for label, count in statuts.items %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small">{{ label }}</span>
+                                <span class="badge bg-secondary">{{ count }}</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <!-- Low Stock -->
+                    <div class="card border-0 shadow-sm rounded-xl">
+                        <div class="card-body">
+                            <h6 class="fw-bold mb-3">⚠️ Stock faible</h6>
+                            {% for livre in stock_faible %}
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <span class="small text-truncate" style="max-width:160px">{{ livre.titre }}</span>
+                                <span class="badge {% if livre.quantite_stock == 0 %}bg-danger{% else %}bg-warning text-dark{% endif %}">{{ livre.quantite_stock }}</span>
+                            </div>
+                            {% empty %}
+                            <p class="text-muted small mb-0">Tous les stocks sont OK 👍</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

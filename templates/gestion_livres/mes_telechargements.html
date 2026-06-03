@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Mes téléchargements — KabiyèBooks{% endblock %}
+
+{% block content %}
+<div class="breadcrumb-section">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item"><a href="{% url 'accueil' %}">Accueil</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'tableau_de_bord' %}">Mon compte</a></li>
+                <li class="breadcrumb-item active">Mes téléchargements</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center flex-shrink-0"
+             style="width:48px;height:48px">
+            <i class="bi bi-file-earmark-arrow-down fs-5"></i>
+        </div>
+        <div>
+            <h2 class="h4 fw-bold mb-0">Mes téléchargements</h2>
+            <p class="text-muted small mb-0">Vos livres numériques achetés</p>
+        </div>
+    </div>
+
+    {% if livres_avec_info %}
+    <div class="row g-4">
+        {% for item in livres_avec_info %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-xl overflow-hidden h-100">
+                <!-- Cover -->
+                <div class="position-relative" style="height:200px;background:#f1f5f9">
+                    {% if item.livre.image_principale %}
+                    <img src="{{ item.livre.image_principale.url }}" alt="{{ item.livre.titre }}"
+                         class="w-100 h-100" style="object-fit:cover">
+                    {% else %}
+                    <div class="w-100 h-100 d-flex align-items-center justify-content-center">
+                        <span style="font-size:4rem;opacity:0.3">📚</span>
+                    </div>
+                    {% endif %}
+                    <span class="position-absolute top-0 end-0 badge bg-primary m-2 px-2 py-1">
+                        <i class="bi bi-file-earmark-pdf me-1"></i>PDF
+                    </span>
+                </div>
+
+                <div class="card-body p-3">
+                    <h6 class="fw-bold mb-1">{{ item.livre.titre|truncatechars:50 }}</h6>
+                    <p class="text-muted small mb-2">{{ item.livre.auteur }}</p>
+
+                    {% if item.nb_telechargements > 0 %}
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-download me-1"></i>{{ item.nb_telechargements }} téléchargement(s)
+                        {% if item.date_premier %}
+                        &nbsp;·&nbsp;{{ item.date_premier|date:"d/m/Y" }}
+                        {% endif %}
+                    </div>
+                    {% else %}
+                    <div class="text-muted small mb-3">
+                        <i class="bi bi-unlock me-1"></i>Prêt à télécharger
+                    </div>
+                    {% endif %}
+
+                    <a href="{% url 'telecharger_pdf' item.livre.slug %}" class="btn btn-primary w-100">
+                        <i class="bi bi-download me-2"></i>Télécharger le PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="alert border-0 rounded-xl mt-5 d-flex gap-3 align-items-start"
+         style="background:#f0fdf4">
+        <i class="bi bi-shield-check text-success fs-4 flex-shrink-0"></i>
+        <div>
+            <strong class="d-block mb-1">Téléchargements illimités</strong>
+            <span class="text-muted small">Vous pouvez télécharger vos livres autant de fois que vous le souhaitez sur tous vos appareils.</span>
+        </div>
+    </div>
+
+    {% else %}
+    <div class="text-center py-5">
+        <div class="mb-4" style="font-size:5rem;opacity:0.2">📥</div>
+        <h4 class="fw-bold mb-2">Aucun livre numérique</h4>
+        <p class="text-muted mb-4">Vous n'avez pas encore acheté de livres en version PDF.<br>
+        Explorez notre boutique pour trouver des livres disponibles en numérique.</p>
+        <a href="{% url 'boutique' %}" class="btn btn-kb-gold px-5">
+            <i class="bi bi-shop me-2"></i>Voir la boutique
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
