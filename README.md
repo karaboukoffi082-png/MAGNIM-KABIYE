@@ -6,7 +6,7 @@ Librairie en ligne spécialisée dans les ouvrages physiques en langue Kabiyè, 
 
 ## 🛠️ Stack Technique
 
-- **Backend** : Python 3.11+ / Django 6.0
+- **Backend** : Python 3.12+ / Django 6.0
 - **Base de données** : PostgreSQL (Production via `psycopg2-binary`) / SQLite (Repli développement)
 - **Fichiers Statiques** : Whitenoise (Servis de manière autonome avec compression & cache agressif)
 - **Fichiers Médias** : Cloudinary (Stockage cloud persistant) / Système de fichiers local (Repli développement)
