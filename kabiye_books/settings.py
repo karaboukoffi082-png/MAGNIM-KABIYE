@@ -14,7 +14,15 @@ env = environ.Env(
 environ.Env.read_env(str(BASE_DIR / '.env'))
 
 # --- SÉCURITÉ ET CONFIGURATION DE BASE ---
-SECRET_KEY = env('SECRET_KEY')
+try:
+    SECRET_KEY = env('SECRET_KEY')
+except Exception as e:
+    import os
+    print("=== DEBUG ENV KEYS ===")
+    print("Clés d'environnement disponibles dans le conteneur :")
+    print(sorted(list(os.environ.keys())))
+    print("=======================")
+    raise e
 DEBUG = env.bool('DEBUG', default=False)
 
 # Configuration des hôtes autorisés (Sécurité renforcée en production via le .env)
