@@ -14,15 +14,17 @@ env = environ.Env(
 environ.Env.read_env(str(BASE_DIR / '.env'))
 
 # --- SÉCURITÉ ET CONFIGURATION DE BASE ---
-try:
-    SECRET_KEY = env('SECRET_KEY')
-except Exception as e:
+SECRET_KEY = env('SECRET_KEY', default='')
+if not SECRET_KEY:
     import os
+    import secrets
     print("=== DEBUG ENV KEYS ===")
     print("Clés d'environnement disponibles dans le conteneur :")
     print(sorted(list(os.environ.keys())))
     print("=======================")
-    raise e
+    # Génération d'une clé temporaire pour éviter le crash au démarrage si absente sur Dokploy
+    SECRET_KEY = secrets.token_hex(24)
+    print("ATTENTION : SECRET_KEY manquante. Une clé temporaire aléatoire a été générée pour le démarrage.")
 DEBUG = env.bool('DEBUG', default=False)
 
 # Configuration des hôtes autorisés (Sécurité renforcée en production via le .env)
