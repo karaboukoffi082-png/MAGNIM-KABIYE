@@ -228,7 +228,7 @@ if CLOUDINARY_STORAGE['CLOUD_NAME']:
             "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         },
     }
 else:
@@ -237,17 +237,13 @@ else:
             "BACKEND": "django.core.files.storage.FileSystemStorage",
         },
         "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
         },
     }
 
 # Compatibilité avec django-cloudinary-storage (requis pour collectstatic de cette lib)
 STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
-
-# Désactiver le mode strict de WhiteNoise pour éviter les plantages lors du collectstatic
-# si des dépendances tierces (comme l'admin Django) font référence à des icônes manquantes
-WHITENOISE_MANIFEST_STRICT = False
 
 
 # =====================================================================
