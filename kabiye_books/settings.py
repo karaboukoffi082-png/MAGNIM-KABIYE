@@ -135,11 +135,21 @@ TEMPLATES = [
 WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
 # --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
+import os
+print("=== DEBUG BASE DE DONNEES ===")
+print("DATABASE_URL dans os.environ :", os.environ.get('DATABASE_URL'))
+print("DB_HOST dans os.environ :", os.environ.get('DB_HOST'))
+print("DB_NAME dans os.environ :", os.environ.get('DB_NAME'))
+print("DB_USER dans os.environ :", os.environ.get('DB_USER'))
+print("DB_PORT dans os.environ :", os.environ.get('DB_PORT'))
+
 if env('DATABASE_URL', default=''):
+    print("DATABASE_URL est present, parsing...")
     DATABASES = {
         'default': env.db('DATABASE_URL')
     }
 else:
+    print("DATABASE_URL est absent, fallback sur les variables individuelles...")
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -150,6 +160,8 @@ else:
             "PORT": env('DB_PORT', default='5432'),
         }
     }
+print("Configuration DATABASES finale :", {k: (v if k != 'PASSWORD' else '********') for k, v in DATABASES['default'].items()})
+print("==============================")
 
 # --- VALIDATION DES MOTS DE PASSE ---
 AUTH_PASSWORD_VALIDATORS = [
