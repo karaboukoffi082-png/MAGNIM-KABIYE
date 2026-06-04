@@ -136,12 +136,42 @@ WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
 # --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
 import os
-print("=== DEBUG BASE DE DONNEES ===")
+import socket
+import subprocess
+
+print("=== DIAGNOSTIC RESEAU DJANGO ===")
 print("DATABASE_URL dans os.environ :", os.environ.get('DATABASE_URL'))
 print("DB_HOST dans os.environ :", os.environ.get('DB_HOST'))
 print("DB_NAME dans os.environ :", os.environ.get('DB_NAME'))
 print("DB_USER dans os.environ :", os.environ.get('DB_USER'))
 print("DB_PORT dans os.environ :", os.environ.get('DB_PORT'))
+
+# 1. Inspecter le resolv.conf
+try:
+    with open('/etc/resolv.conf', 'r') as f:
+        print("=== /etc/resolv.conf ===")
+        print(f.read())
+except Exception as e:
+    print("Erreur lecture resolv.conf :", e)
+
+# 2. Tester la résolution DNS socket
+for host in ['google.com', os.environ.get('DB_HOST'), 'kabiyebooks-database-postgres-ne9dfe']:
+    if host:
+        try:
+            ip = socket.gethostbyname(host)
+            print(f"DNS OK : {host} -> {ip}")
+        except Exception as e:
+            print(f"DNS FAILED pour {host} :", e)
+
+# 3. Tester ping / routage
+try:
+    res = subprocess.run(['ping', '-c', '1', '8.8.8.8'], capture_output=True, text=True, timeout=2)
+    print("=== Ping 8.8.8.8 ===")
+    print(res.stdout or res.stderr)
+except Exception as e:
+    print("Erreur ping 8.8.8.8 :", e)
+
+print("=================================")
 
 if env('DATABASE_URL', default=''):
     print("DATABASE_URL est present, parsing...")
