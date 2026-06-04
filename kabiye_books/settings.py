@@ -136,65 +136,7 @@ WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
 # --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
 import os
-import socket
-import subprocess
-
-print("=== DIAGNOSTIC RESEAU DJANGO ===")
-print("DATABASE_URL dans os.environ :", os.environ.get('DATABASE_URL'))
-print("DB_HOST dans os.environ :", os.environ.get('DB_HOST'))
-print("DB_NAME dans os.environ :", os.environ.get('DB_NAME'))
-print("DB_USER dans os.environ :", os.environ.get('DB_USER'))
-print("DB_PORT dans os.environ :", os.environ.get('DB_PORT'))
-
-# 1. Inspecter le resolv.conf
-try:
-    with open('/etc/resolv.conf', 'r') as f:
-        print("=== /etc/resolv.conf ===")
-        print(f.read())
-except Exception as e:
-    print("Erreur lecture resolv.conf :", e)
-
-# 1b. Inspecter le fichier .env s'il existe dans le conteneur
-dot_env_path = BASE_DIR / '.env'
-print("Chemin du fichier .env recherche :", dot_env_path)
-if dot_env_path.exists():
-    try:
-        with open(dot_env_path, 'r') as f:
-            print("=== CONTENU DU FICHIER .env DANS LE CONTENEUR ===")
-            for line in f:
-                # Masquer les mots de passe et clés
-                if '=' in line:
-                    k, v = line.split('=', 1)
-                    if any(secret in k.upper() for secret in ['KEY', 'PASSWORD', 'SECRET', 'URL']):
-                        print(f"{k}=********")
-                    else:
-                        print(line.strip())
-                else:
-                    print(line.strip())
-            print("=================================================")
-    except Exception as e:
-        print("Erreur de lecture du fichier .env :", e)
-else:
-    print("Aucun fichier .env trouve dans le conteneur a ce chemin.")
-
-# 2. Tester la résolution DNS socket
-for host in ['google.com', os.environ.get('DB_HOST'), 'kabiyebooks-database-postgres-ne9dfe']:
-    if host:
-        try:
-            ip = socket.gethostbyname(host)
-            print(f"DNS OK : {host} -> {ip}")
-        except Exception as e:
-            print(f"DNS FAILED pour {host} :", e)
-
-# 3. Tester ping / routage
-try:
-    res = subprocess.run(['ping', '-c', '1', '8.8.8.8'], capture_output=True, text=True, timeout=2)
-    print("=== Ping 8.8.8.8 ===")
-    print(res.stdout or res.stderr)
-except Exception as e:
-    print("Erreur ping 8.8.8.8 :", e)
-
-print("=================================")
+raise ValueError(f"DIAGNOSTIC ENVS -> DATABASE_URL: {os.environ.get('DATABASE_URL')} | DB_HOST: {os.environ.get('DB_HOST')} | DB_NAME: {os.environ.get('DB_NAME')} | DB_USER: {os.environ.get('DB_USER')}")
 
 if env('DATABASE_URL', default=''):
     print("DATABASE_URL est present, parsing...")
