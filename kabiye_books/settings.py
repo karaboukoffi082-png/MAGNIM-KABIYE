@@ -241,6 +241,10 @@ else:
         },
     }
 
+# Compatibilité avec django-cloudinary-storage (requis pour collectstatic de cette lib)
+STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
+DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
+
 
 # =====================================================================
 # --- APIS DE PAIEMENTS AFRICAINES ---
