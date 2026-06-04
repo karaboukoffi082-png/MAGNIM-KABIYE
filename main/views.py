@@ -9,8 +9,9 @@ from .models import ContactMessage
 
 
 def accueil(request):
-    livres_vedette = Livre.objects.filter(disponible=True, en_vedette=True)[:8]
-    livres_recents = Livre.objects.filter(disponible=True).order_by("-created_at")[:8]
+    # Changement ici : Limitation à 4 livres au lieu de 8 pour l'affichage en colonne
+    livres_vedette = Livre.objects.filter(disponible=True, en_vedette=True)[:4]
+    livres_recents = Livre.objects.filter(disponible=True).order_by("-created_at")[:4]
     categories = Categorie.objects.filter(active=True, parent__isnull=True)[:6]
     return render(request, "main/accueil.html", {
         "livres_vedette": livres_vedette,
