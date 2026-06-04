@@ -76,9 +76,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     
-    # Ordre crucial : Cloudinary_storage doit être chargé AVANT staticfiles
-    "cloudinary_storage",            
     "django.contrib.staticfiles",
+    "cloudinary_storage",            
+
     
     # Librairies tierces
     "rest_framework",
