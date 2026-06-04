@@ -245,6 +245,10 @@ else:
 STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
 DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
 
+# Désactiver le mode strict de WhiteNoise pour éviter les plantages lors du collectstatic
+# si des dépendances tierces (comme l'admin Django) font référence à des icônes manquantes
+WHITENOISE_MANIFEST_STRICT = False
+
 
 # =====================================================================
 # --- APIS DE PAIEMENTS AFRICAINES ---
