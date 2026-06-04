@@ -154,6 +154,29 @@ try:
 except Exception as e:
     print("Erreur lecture resolv.conf :", e)
 
+# 1b. Inspecter le fichier .env s'il existe dans le conteneur
+dot_env_path = BASE_DIR / '.env'
+print("Chemin du fichier .env recherche :", dot_env_path)
+if dot_env_path.exists():
+    try:
+        with open(dot_env_path, 'r') as f:
+            print("=== CONTENU DU FICHIER .env DANS LE CONTENEUR ===")
+            for line in f:
+                # Masquer les mots de passe et clés
+                if '=' in line:
+                    k, v = line.split('=', 1)
+                    if any(secret in k.upper() for secret in ['KEY', 'PASSWORD', 'SECRET', 'URL']):
+                        print(f"{k}=********")
+                    else:
+                        print(line.strip())
+                else:
+                    print(line.strip())
+            print("=================================================")
+    except Exception as e:
+        print("Erreur de lecture du fichier .env :", e)
+else:
+    print("Aucun fichier .env trouve dans le conteneur a ce chemin.")
+
 # 2. Tester la résolution DNS socket
 for host in ['google.com', os.environ.get('DB_HOST'), 'kabiyebooks-database-postgres-ne9dfe']:
     if host:
