@@ -1,8 +1,12 @@
 from django.db import models
 from django.utils.text import slugify
 from django.db.models import Avg
+from django.core.files.storage import FileSystemStorage
 from gestion_categories.models import Categorie
 from gestion_utilisateurs.models import Utilisateur
+
+# Instance de stockage local dédiée pour forcer les fichiers PDF à rester sur le VPS
+stockage_local_pdf = FileSystemStorage()
 
 
 class Langue(models.Model):
@@ -31,7 +35,10 @@ class Livre(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     prix_promo = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     type_vente = models.CharField(max_length=20, choices=TYPE_VENTE_CHOICES, default="physique")
-    fichier_pdf = models.FileField(upload_to="livres/pdf/", blank=True, null=True)
+    
+    # Correction : Utilisation explicite du stockage local du VPS pour le fichier PDF
+    fichier_pdf = models.FileField(upload_to="livres/pdf/", storage=stockage_local_pdf, blank=True, null=True)
+    
     prix_pdf = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True,
                                    help_text="Laisser vide pour utiliser le même prix que le livre physique")
     langue = models.ForeignKey(Langue, on_delete=models.SET_NULL, null=True, blank=True)
@@ -42,7 +49,10 @@ class Livre(models.Model):
     quantite_stock = models.PositiveIntegerField(default=0)
     disponible = models.BooleanField(default=True)
     en_vedette = models.BooleanField(default=False)
+    
+    # ImageField géré par Cloudinary automatiquement via STORAGES['default'] en production
     image_principale = models.ImageField(upload_to="livres/", blank=True, null=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -100,7 +110,10 @@ class TelechargementPDF(models.Model):
 
 class ImageLivre(models.Model):
     livre = models.ForeignKey(Livre, on_delete=models.CASCADE, related_name="images")
+    
+    # ImageField de la galerie également intercepté et optimisé par Cloudinary en production
     image = models.ImageField(upload_to="livres/galerie/")
+    
     ordre = models.PositiveIntegerField(default=0)
 
     class Meta:
