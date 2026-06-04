@@ -6,56 +6,89 @@
 
 {% block content %}
 
-<!-- ═══ HERO SECTION ═══════════════════════════════════════════════════════ -->
-<section class="hero-section d-flex align-items-center py-5">
-    <div class="container position-relative">
+
+ 
+<!-- ═══ SECTION HERO (BLANC & DORÉ LUMINEUX / PREMIUM) ═══════════════════════════════════════════════════════ -->
+<section class="hero-section d-flex align-items-center py-5 position-relative overflow-hidden" style="background-color: #ffffff; border-bottom: 2px solid rgba(204, 164, 59, 0.2);">
+    <!-- Lueurs d'ambiance d'arrière-plan très subtiles pour le prestige -->
+    <div class="position-absolute rounded-circle opacity-5" style="width: 400px; height: 400px; top: -10%; left: -5%; background-color: var(--kb-gold); filter: blur(100px);"></div>
+    <div class="position-absolute rounded-circle opacity-5" style="width: 300px; height: 300px; bottom: 5%; right: 15%; background-color: var(--kb-green); filter: blur(80px);"></div>
+
+    <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center g-5">
+            
+            <!-- CONTENU TEXTE (GAUCHE) -->
             <div class="col-lg-7">
-                <p class="fw-semibold mb-2 text-uppercase ls-wide" style="color: var(--kb-gold); letter-spacing: 2px">
-                    🌍 Librairie Africaine en ligne
+                <p class="fw-bold mb-3 text-uppercase ls-wide d-inline-flex align-items-center bg-light px-3 py-1.5 rounded-pill" style="color: var(--kb-green); letter-spacing: 1.5px; font-size: 0.85rem; border: 1px solid rgba(204, 164, 59, 0.15);">
+                    <span class="me-2">🌍</span> Librairie Africaine en ligne
                 </p>
-                <h1 class="hero-title mb-3">
-                    KABIYE TOM<br>
-                    Découvrez les trésors de la <span style="color: var(--kb-gold)">culture kabiyè</span><br>
-                    <span class="fs-3 fw-normal" style="color: rgba(255,255,255,0.85)">&amp; africaine</span>
+                
+                <h1 class="hero-title mb-3" style="color: var(--kb-green); font-weight: 850; line-height: 1.2; letter-spacing: -0.5px;">
+                    <span class="display-4 fw-black d-block" style="letter-spacing: 1px; color: #ffffff;">KABIYE TOM</span>
+                    <span class="fs-2 fw-bold text-secondary d-block mt-1" style="color: rgb(242, 242, 6) !important;">Découvrez les trésors de la</span> 
+                    <span class="fs-1 fw-extrabold d-inline-block position-relative mt-1" style="color: var(--kb-gold); text-shadow: 0px 1px 2px rgba(204, 164, 59, 0.15);">
+                        culture kabiyè
+                    </span>
+                    <span class="fs-2 fw-normal italic-subtitle ms-2" style="color: hsl(60, 19%, 94%); font-style: italic;">&amp; africaine</span>
                 </h1>
-                <p class="hero-subtitle fs-5 mb-4" style="color: rgba(255,255,255,0.8)">
-                    Dictionnaires, romans, livres scolaires et culturels.<br>
-                    <em>Livrés partout au Togo et dans le monde entier.</em>
                 
+                <p class="hero-subtitle fs-5 mb-4 mt-3" style="color: rgb(248, 250, 252); font-weight: 400; line-height: 1.6;">
+                    Dictionnaires, romans, articles scolaires et culturels.<br>
+                    <span class="px-2 py-0.5 rounded" style="background-color: rgba(204, 164, 59, 0.08); color: var(--kb-gold); font-weight: 600; font-style: italic;">
+                        « Ma culture, ma richesse. »
+                    </span>
+                </p>
                 
-                <div class="d-flex gap-3 flex-wrap">
-                    <a href="{% url 'boutique' %}" class="btn btn-warning btn-lg fw-semibold px-4 shadow">
+                <!-- BOUTONS D'ACTION (Ajustés au survol) -->
+                <div class="d-flex gap-3 flex-wrap mb-4">
+                    <a href="{% url 'boutique' %}" class="btn btn-lg fw-bold px-4 text-white shadow hero-btn-primary" style="background-color: var(--kb-green); border: 2px solid var(--kb-green); transition: all 0.3s ease;">
                         <i class="bi bi-bag me-2"></i>Explorer la boutique
                     </a>
-                    <a href="{% url 'livres_kabiye' %}" class="btn btn-outline-light btn-lg px-4">
-                        📖 Livres Kabiyè <i class="bi bi-arrow-right ms-1"></i>
+                    <a href="{% url 'livres_kabiye' %}" class="btn btn-lg fw-bold px-4 hero-btn-secondary" style="border: 2px solid var(--kb-gold); color: #f6da0b; background-color: transparent; transition: all 0.3s ease;">
+                        📖 Livres Kabiyè <i class="bi bi-arrow-right ms-2" style="color: var(--kb-gold);"></i>
                     </a>
                 </div>
                 
-                <div class="mt-4 d-flex gap-4 flex-wrap">
-                    <span class="text-warning-emphasis small"><i class="bi bi-shield-check me-1"></i>Paiement sécurisé</span>
-                    <span class="text-warning-emphasis small"><i class="bi bi-truck me-1"></i>Livraison Togo &amp; International</span>
-                    <span class="text-warning-emphasis small"><i class="bi bi-file-earmark-pdf me-1"></i>PDF disponibles</span>
+                <!-- AVANTAGES DE CONFIANCE (ICÔNES ET LABELS REDESSINÉS) -->
+                <div class="mt-4 pt-2 d-flex gap-4 flex-wrap border-top border-light">
+                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
+                        <i class="bi bi-credit-card-2-front me-2 fs-5" style="color: var(--kb-gold);"></i>Paiement sécurisé
+                    </span>
+                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
+                        <i class="bi bi-truck me-2 fs-5" style="color: var(--kb-gold);"></i>Livraison Togo &amp; International
+                    </span>
+                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
+                        <i class="bi bi-file-earmark-pdf-fill me-2 fs-5" style="color: var(--kb-gold);"></i>PDF disponibles
+                    </span>
                 </div>
             </div>
 
+            <!-- VISUEL ENSEIGNE RETROÉCLAIRÉ (DROITE) -->
             <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <div class="hero-books-visual text-center">
-                    {% if magnim_img %}
-                    <img src="{{ magnim_img }}" alt="KabiyèBooks Magnim"
-                         class="img-fluid rounded-circle shadow-lg"
-                         style="width: 280px; height: 280px; object-fit: cover; border: 4px solid var(--kb-gold);">
-                    {% else %}
-                    <img src="{% static 'img/logo.jpeg' %}" alt="Magnim — Ma culture, ma richesse" 
-                         class="img-fluid rounded-circle bg-white shadow-lg p-2" 
-                         style="width: 280px; height: 280px; object-fit: cover; border: 4px solid var(--kb-gold); opacity: 0.95;">
-                    {% endif %}
+                <div class="hero-books-visual text-center position-relative">
+                    <!-- Halo lumineux rappelant l'enseigne du Centre Magnim -->
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" 
+                         style="width: 320px; height: 320px; background: radial-gradient(circle, rgba(204,164,59,0.2) 0%, rgba(255,255,255,0) 70%); z-index: 1;">
+                    </div>
+                    
+                    <div class="position-relative" style="z-index: 2;">
+                        {% if magnim_img %}
+                        <img src="{{ magnim_img }}" alt="KabiyèBooks Magnim"
+                             class="img-fluid rounded-circle img-enseigne-premium"
+                             style="width: 310px; height: 310px; object-fit: cover; border: 6px solid #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.25) !important;">
+                        {% else %}
+                        <img src="{% static 'img/logo.jpeg' %}" alt="Magnim — Ma culture, ma richesse" 
+                             class="img-fluid rounded-circle bg-white p-1 img-enseigne-premium" 
+                             style="width: 310px; height: 310px; object-fit: cover; border: 6px solid #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.25) !important;">
+                        {% endif %}
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </section>
+
 
 <!-- ═══ MAGNIM — MISSION CULTURELLE ════════════════════════════════════════ -->
 <section class="py-5" style="background: linear-gradient(135deg, #faf7f2, #fff);">
@@ -151,7 +184,7 @@
 <section class="py-5 bg-kb-cream">
     <div class="container">
         <div class="text-center mb-5">
-            <span class="badge bg-warning text-dark px-3 py-2 mb-2 fs-6">🎭 Notre culture</span>
+            <span class="badge bg-warning text-dark px-3 py-2 mb-2 fs-6">Notre culture</span>
             <h2 class="section-title">Culture &amp; Patrimoine Kabiyè</h2>
             <p class="text-muted">Découvrez les rites initiatiques et les danses traditionnelles de notre peuple</p>
         </div>
@@ -259,31 +292,34 @@
 <!-- ═══ CATEGORIES ═════════════════════════════════════════════════════════ -->
 
 
-
-<!-- Section Nos Catégories - Version Dansante & Moderne -->
-<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #1a2e1a 0%, #0d1a0d 100%);">
-    <!-- Cercles de lueur d'ambiance en arrière-plan -->
-    <div class="position-absolute rounded-circle opacity-10 bg-warning" style="width: 250px; height: 250px; top: -5%; left: -5%; filter: blur(70px); animation: catAura 9s ease-in-out infinite;"></div>
-    <div class="position-absolute rounded-circle opacity-10 bg-success" style="width: 300px; height: 300px; bottom: -10%; right: -5%; filter: blur(80px); animation: catAura 13s ease-in-out infinite alternate;"></div>
+<!-- ═══ SECTION CATÉGORIES (HARMONISÉE ENSEIGNE MAGNIM) ═══════════════════════════════════════════════════════ -->
+<section class="py-5 position-relative overflow-hidden" style="background-color: #ffffff;">
+    <!-- Subtiles lueurs d'ambiance claires (Doré et Vert très transparents pour rappeler le rétroéclairage) -->
+    <div class="position-absolute rounded-circle opacity-5" style="width: 250px; height: 250px; top: -5%; left: -5%; background-color: var(--kb-gold); filter: blur(70px); animation: catAura 9s ease-in-out infinite;"></div>
+    <div class="position-absolute rounded-circle opacity-5" style="width: 300px; height: 300px; bottom: -10%; right: -5%; background-color: var(--kb-green); filter: blur(80px); animation: catAura 13s ease-in-out infinite alternate;"></div>
 
     <div class="container position-relative" style="z-index: 2;">
-        <!-- En-tête de section -->
+        <!-- En-tête de section style Enseigne -->
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white display-5 mb-2">Nos Catégories — <span class="text-warning">rèdè tom tekèssi</span></h2>
-            <div class="mx-auto bg-warning mt-3 progress-dance-bar" style="width: 60px; height: 4px; border-radius: 2px;"></div>
+            <h2 class="fw-bold display-6 mb-2" style="color: var(--kb-green); font-weight: 800;">
+                Nos Catégories — <span style="color: var(--kb-gold);">rèdè tom tekèssi</span>
+            </h2>
+            <!-- Ligne de séparation dorée -->
+            <div class="mx-auto mt-3 progress-dance-bar" style="width: 60px; height: 3px; background-color: var(--kb-gold); border-radius: 2px;"></div>
         </div>
 
-        <!-- Grille de cartes dynamiques ou statiques -->
+        <!-- Grille de cartes -->
         <div class="row g-3 justify-content-center">
             {% if categories %}
                 {% for cat in categories %}
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'livres_par_categorie' cat.slug %}" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                                <i class="bi {{ cat.icone|default:'bi-book' }} fs-3"></i>
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <!-- Icône en Vert Impérial ou Doré selon dynamique -->
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-green);">
+                                <i class="bi {{ cat.icone|default:'bi-book' }} fs-3" style="color: #ffffff;"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">{{ cat.nom }}</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">{{ cat.nom }}</div>
                         </div>
                     </a>
                 </div>
@@ -292,23 +328,23 @@
                 <!-- Catégorie 1 : Livres Kabiyè -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'livres_kabiye' %}" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
-                                <i class="bi bi-journal-bookmark-fill fs-3"></i>
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-gold);">
+                                <i class="bi bi-journal-bookmark-fill fs-3 text-white"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Livres Kabiyè</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">Livres Kabiyè</div>
                         </div>
                     </a>
                 </div>
 
-                <!-- Catégorie 2 : Livres Togolais (Icône personnalisée avec les couleurs nationales) -->
+                <!-- Catégorie 2 : Romans des écrivains Togolais -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'boutique' %}?q=togolais" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center logo-tg-colors" style="width: 60px; height: 60px;">
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-green);">
                                 <i class="bi bi-flag-fill fs-3"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Livres Togolais</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">Livres Togolais</div>
                         </div>
                     </a>
                 </div>
@@ -316,11 +352,11 @@
                 <!-- Catégorie 3 : Livres Africains -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'boutique' %}?q=africain" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-green);">
                                 <i class="bi bi-globe-africa fs-3"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Livres Africains</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">Livres Africains</div>
                         </div>
                     </a>
                 </div>
@@ -328,11 +364,11 @@
                 <!-- Catégorie 4 : Livres Scolaires -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'boutique' %}?q=scolaire" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-gold);">
                                 <i class="bi bi-backpack fs-3"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Livres Scolaires</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">Articles Scolaires</div>
                         </div>
                     </a>
                 </div>
@@ -340,11 +376,11 @@
                 <!-- Catégorie 5 : Romans -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'boutique' %}?q=roman" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: var(--kb-green);">
                                 <i class="bi bi-pen fs-3"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Romans</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #333333;">Romans</div>
                         </div>
                     </a>
                 </div>
@@ -352,11 +388,11 @@
                 <!-- Catégorie 6 : Promotions -->
                 <div class="col-6 col-md-4 col-lg-2">
                     <a href="{% url 'promotions' %}" class="text-decoration-none d-block h-100 unique-cat-card">
-                        <div class="card h-100 p-3 border-0 text-center text-white layout-dancing-card" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                            <div class="cat-dance-icon mx-auto mb-3 bg-danger text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px;">
+                        <div class="card h-100 p-3 text-center layout-dancing-card" style="background: #faf9f5; border: 1px solid rgba(220, 53, 69, 0.25); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: all 0.3s ease;">
+                            <div class="cat-dance-icon mx-auto mb-3 text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 60px; height: 60px; background-color: #dc3545;">
                                 <i class="bi bi-tags fs-3"></i>
                             </div>
-                            <div class="fw-semibold small text-white-50 cat-title-hover">Promotions</div>
+                            <div class="fw-bold small cat-title-hover" style="color: #dc3545;">Promotions</div>
                         </div>
                     </a>
                 </div>
@@ -364,58 +400,6 @@
         </div>
     </div>
 </section>
-
-<!-- Moteur CSS des Animations des Catégories -->
-<style>
-    /* Structure et transition 3D des grilles de catégories */
-    .layout-dancing-card {
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(255, 255, 255, 0.06) !important;
-        border-radius: 12px;
-    }
-
-    /* Effet d'inclinaison de la carte et mise en lumière au survol */
-    .unique-cat-card:hover .layout-dancing-card {
-        transform: translateY(-8px) rotateY(10deg);
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: #ffc107 !important;
-        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-    }
-
-    /* Le texte de la catégorie s'illumine en blanc pur au survol */
-    .unique-cat-card:hover .cat-title-hover {
-        color: #ffffff !important;
-    }
-
-    /* Déclenchement de la danse (saut rythmé) de la bulle d'icône */
-    .unique-cat-card:hover .cat-dance-icon {
-        animation: catIconDance 0.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes catIconDance {
-        0% { transform: scale(1) translateY(0); }
-        100% { transform: scale(1.12) translateY(-4px); box-shadow: 0 5px 12px rgba(255, 193, 7, 0.3); }
-    }
-
-    /* Style unique pour le badge Togo (Vert forêt avec lueur rouge) */
-    .logo-tg-colors {
-        background: linear-gradient(135deg, #006a4e, #d21034);
-    }
-
-    /* Mouvement lent de l'aura en arrière-plan */
-    @keyframes catAura {
-        0% { transform: translateY(0px) translateX(0px); }
-        50% { transform: translateY(-20px) translateX(15px); }
-        100% { transform: translateY(0px) translateX(0px); }
-    }
-
-    /* Activation de la scène perspective */
-    .row {
-        perspective: 800px;
-    }
-</style>
-
-
 
 
 <!-- ═══ LIVRES EN VEDETTE ══════════════════════════════════════════════════ -->
@@ -600,140 +584,120 @@
     </div>
 </section>
 
-<!-- ═══ COMMENT ÇA MARCHE ══════════════════════════════════════════════════ -->
-
-<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(135deg, #1a2e1a 0%, #0d1a0d 100%);">
-    <div class="position-absolute rounded-circle opacity-10 bg-warning" style="width: 300px; height: 300px; top: -5%; right: -5%; filter: blur(80px); animation: stepAura 10s ease-in-out infinite;"></div>
-    <div class="position-absolute rounded-circle opacity-10 bg-success" style="width: 350px; height: 350px; bottom: -10%; left: -5%; filter: blur(90px); animation: stepAura 14s ease-in-out infinite alternate;"></div>
+<!-- ═══ SECTION : COMMENT COMMANDER (ÉPURÉE & PREMIUM) ═══════════════════════════════════════════════════════ -->
+<section class="py-5 position-relative overflow-hidden" style="background-color: #ffffff;">
+    <!-- Subtiles lueurs claires en arrière-plan -->
+    <div class="position-absolute rounded-circle opacity-5" style="width: 300px; height: 300px; top: -5%; right: -5%; background-color: var(--kb-gold); filter: blur(80px); animation: stepAura 10s ease-in-out infinite;"></div>
+    <div class="position-absolute rounded-circle opacity-5" style="width: 350px; height: 350px; bottom: -10%; left: -5%; background-color: var(--kb-green); filter: blur(90px); animation: stepAura 14s ease-in-out infinite alternate;"></div>
 
     <div class="container position-relative" style="z-index: 2;">
+        <!-- En-tête -->
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-white display-5 mb-2">Comment commander — <span class="text-warning">Rèdè yabouto</span></h2>
-            <p class="text-white-50 lead fs-5 mx-auto" style="max-width: 600px;">Simple, rapide et sécurisé — <span class="text-success" style="font-style: italic;">Kpɛtɛ, cɛtɛ nɛ ŋmɛlɛ</span></p>
-            <div class="mx-auto bg-warning mt-3 progress-dance-bar" style="width: 60px; height: 4px; border-radius: 2px;"></div>
+            <h2 class="fw-bold display-6 mb-2" style="color: var(--kb-green); font-weight: 800;">
+                Comment commander — <span style="color: var(--kb-gold);">Rèdè yabouto</span>
+            </h2>
+            <p class="lead fs-6 mx-auto text-muted" style="max-width: 600px; font-weight: 500;">
+                Simple, rapide et sécurisé — <span style="color: var(--kb-green); font-style: italic; font-weight: 600;">Kpɛtɛ, cɛtɛ nɛ ŋmɛlɛ</span>
+            </p>
+            <div class="mx-auto mt-3 progress-dance-bar" style="width: 60px; height: 3px; background-color: var(--kb-gold); border-radius: 2px;"></div>
         </div>
 
+        <!-- Grille des étapes -->
         <div class="row g-4 text-center justify-content-center">
             
+            <!-- Étape 1 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 text-white card-dancing-style" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px);">
-                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center border border-3 border-dark" style="width: 36px; height: 36px; z-index: 3;">1</div>
-                    <div class="icon-dance-container mx-auto mb-4 bg-success text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-dancing-style" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative;">
+                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px; z-index: 3; background-color: var(--kb-gold);">1</div>
+                    <div class="icon-dance-container mx-auto mb-4 text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px; background-color: var(--kb-green);">
                         <i class="bi bi-cart-plus fs-2"></i>
                     </div>
-                    <h5 class="fw-bold mb-2">Choisissez votre livre</h5>
-                    <p class="text-white-50 small mb-0">Parcourez notre riche catalogue et ajoutez vos livres coups de cœur au panier.</p>
+                    <h5 class="fw-bold mb-2" style="color: #222222;">Choisissez votre livre</h5>
+                    <p class="text-muted small mb-0">Parcourez notre riche catalogue et ajoutez vos livres coups de cœur au panier.</p>
                 </div>
             </div>
 
+            <!-- Étape 2 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 text-white card-dancing-style" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); animation-delay: 0.15s !important;">
-                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center border border-3 border-dark" style="width: 36px; height: 36px; z-index: 3;">2</div>
-                    <div class="icon-dance-container mx-auto mb-4 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-dancing-style" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; animation-delay: 0.15s !important;">
+                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px; z-index: 3; background-color: var(--kb-gold);">2</div>
+                    <div class="icon-dance-container mx-auto mb-4 text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px; background-color: var(--kb-green);">
                         <i class="bi bi-person-plus fs-2"></i>
                     </div>
-                    <h5 class="fw-bold mb-2">Créez votre compte</h5>
-                    <p class="text-white-50 small mb-0">Inscription gratuite en quelques secondes seulement — <em class="text-warning">Maa gnèhirè</em>.</p>
+                    <h5 class="fw-bold mb-2" style="color: #222222;">Créez votre compte</h5>
+                    <p class="text-muted small mb-0">Inscription gratuite en quelques secondes seulement — <em style="color: var(--kb-gold); font-weight: 600;">Maa gnèhirè</em>.</p>
                 </div>
             </div>
 
+            <!-- Étape 3 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 text-white card-dancing-style" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); animation-delay: 0.3s !important;">
-                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center border border-3 border-dark" style="width: 36px; height: 36px; z-index: 3;">3</div>
-                    <div class="icon-dance-container mx-auto mb-4 bg-success text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-dancing-style" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; animation-delay: 0.3s !important;">
+                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px; z-index: 3; background-color: var(--kb-gold);">3</div>
+                    <div class="icon-dance-container mx-auto mb-4 text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px; background-color: var(--kb-gold);">
                         <i class="bi bi-wallet2 fs-2"></i>
                     </div>
-                    <h5 class="fw-bold mb-2">Payez en ligne</h5>
-                    <p class="text-white-50 small mb-0">Flooz, T-Money ou carte bancaire. Passerelle de paiement sécurisée obligatoire.</p>
+                    <h5 class="fw-bold mb-2" style="color: #222222;">Payez en ligne</h5>
+                    <p class="text-muted small mb-0">Flooz, T-Money ou carte bancaire. Passerelle de paiement sécurisée obligatoire.</p>
                 </div>
             </div>
 
+            <!-- Étape 4 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 text-white card-dancing-style" style="background: rgba(255, 255, 255, 0.04); backdrop-filter: blur(10px); animation-delay: 0.45s !important;">
-                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle bg-warning text-dark fw-bold d-flex align-items-center justify-content-center border border-3 border-dark" style="width: 36px; height: 36px; z-index: 3;">4</div>
-                    <div class="icon-dance-container mx-auto mb-4 bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-dancing-style" style="background: #faf9f5; border: 1px solid rgba(204, 164, 59, 0.25); box-shadow: 0 4px 15px rgba(0,0,0,0.02); position: relative; animation-delay: 0.45s !important;">
+                    <div class="position-absolute top-0 start-50 translate-middle rounded-circle text-white fw-bold d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px; z-index: 3; background-color: var(--kb-gold);">4</div>
+                    <div class="icon-dance-container mx-auto mb-4 text-white rounded-circle d-flex align-items-center justify-content-center mt-2" style="width: 70px; height: 70px; background-color: var(--kb-green);">
                         <i class="bi bi-box-seam fs-2"></i>
                     </div>
-                    <h5 class="fw-bold mb-2">Recevez l'ouvrage</h5>
-                    <p class="text-white-50 small mb-0">Accès PDF immédiat après validation et livraison à domicile pour vos livres physiques.</p>
+                    <h5 class="fw-bold mb-2" style="color: #222222;">Recevez l'ouvrage</h5>
+                    <p class="text-muted small mb-0">Accès PDF immédiat après validation et livraison à domicile pour vos livres physiques.</p>
                 </div>
             </div>
 
         </div>
 
-        <div class="alert border-0 rounded-3 mt-5 p-3 text-center" style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.25) !important;">
-            <i class="bi bi-shield-lock-fill text-warning fs-4 me-2"></i>
-            <span class="text-white fw-bold">Paiement requis avant toute commande ou téléchargement.</span>
-            <span class="text-white-50 ms-1 small d-block d-md-inline">Aucun accès accordé sans confirmation bancaire ou mobile valide.</span>
+        <!-- Alerte de sécurité (Ajustée aux couleurs) -->
+        <div class="alert border-0 rounded-3 mt-5 p-3 text-center" style="background: rgba(204, 164, 59, 0.08); border: 1px solid rgba(204, 164, 59, 0.2) !important;">
+            <i class="bi bi-shield-lock-fill fs-4 me-2" style="color: var(--kb-gold);"></i>
+            <span class="fw-bold" style="color: var(--kb-green);">Paiement requis avant toute commande ou téléchargement.</span>
+            <span class="text-muted ms-1 small d-block d-md-inline">Aucun accès accordé sans confirmation bancaire ou mobile valide.</span>
         </div>
     </div>
 </section>
 
-<style>
-    /* Structure de base et transition tridimensionnelle des cartes */
-    .card-dancing-style {
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    }
 
-    /* Effet de balancement et surélévation "dansante" au survol */
-    .card-dancing-style:hover {
-        transform: translateY(-12px) rotateX(8deg) rotateY(-4deg);
-        background: rgba(255, 255, 255, 0.12) !important;
-        border-color: #ffc107 !important;
-        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
-    }
-
-    /* Déclenchement de la pulsation sautillante de l'icône au survol */
-    .card-dancing-style:hover .icon-dance-container {
-        animation: iconPulseStep 0.6s ease-in-out infinite alternate;
-    }
-
-    @keyframes iconPulseStep {
-        0% { transform: scale(1) translateY(0); }
-        100% { transform: scale(1.15) translateY(-6px); box-shadow: 0 6px 15px rgba(255, 193, 7, 0.3); }
-    }
-
-    /* Mouvement lent des lumières décoratives en arrière-plan */
-    @keyframes stepAura {
-        0% { transform: translateY(0px) translateX(0px); }
-        50% { transform: translateY(-20px) translateX(15px); }
-        100% { transform: translateY(0px) translateX(0px); }
-    }
-
-    /* Déclaration de perspective globale pour le moteur 3D */
-    .row {
-        perspective: 1000px;
-    }
-</style>
-
-
-<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(180deg, #ffffff 0%, #f7f9f6 100%);">
-    <div class="position-absolute rounded-circle opacity-25 bg-warning" style="width: 350px; height: 350px; top: -10%; left: -5%; filter: blur(100px); animation: auraFloat 8s ease-in-out infinite;"></div>
-    <div class="position-absolute rounded-circle opacity-20 bg-success" style="width: 400px; height: 400px; bottom: -15%; right: -5%; filter: blur(110px); animation: auraFloat 12s ease-in-out infinite alternate;"></div>
+<!-- ═══ SECTION : POURQUOI KABIYEBOOKS (HARMONISÉE) ══════════════════════════════════════════════════════════ -->
+<section class="py-5 position-relative overflow-hidden" style="background: linear-gradient(180deg, #ffffff 0%, #fcfdfb 100%); border-top: 1px solid rgba(0,0,0,0.03);">
+    <div class="position-absolute rounded-circle opacity-5" style="width: 350px; height: 350px; top: -10%; left: -5%; background-color: var(--kb-gold); filter: blur(100px); animation: stepAura 8s ease-in-out infinite;"></div>
+    <div class="position-absolute rounded-circle opacity-5" style="width: 400px; height: 400px; bottom: -15%; right: -5%; background-color: var(--kb-green); filter: blur(110px); animation: stepAura 12s ease-in-out infinite alternate;"></div>
 
     <div class="container position-relative" style="z-index: 2;">
+        <!-- En-tête -->
         <div class="text-center mb-5">
-            <h2 class="fw-bold text-dark display-5 mb-2">Pourquoi <span class="text-success fw-extrabold" style="color: #198754 !important;">Kabiyè<span class="text-warning">Books</span></span> ?</h2>
-            <p class="text-muted lead fs-5 mx-auto" style="max-width: 600px;">Découvrez les piliers de notre engagement pour la culture et votre confort au quotidien.</p>
-            <div class="mx-auto mt-3 progress-dance-bar" style="width: 60px; height: 4px; border-radius: 2px; background-color: #ffc107;"></div>
+            <h2 class="fw-bold display-5 mb-2" style="color: #222222;">
+                Pourquoi <span style="color: var(--kb-green); font-weight: 800;">Kabiyè<span style="color: var(--kb-gold);">Books</span></span> ?
+            </h2>
+            <p class="text-muted lead fs-6 mx-auto" style="max-width: 600px;">Découvrez les piliers de notre engagement pour la culture et votre confort au quotidien.</p>
+            <div class="mx-auto mt-3" style="width: 60px; height: 3px; background-color: var(--kb-gold); border-radius: 2px;"></div>
         </div>
 
+        <!-- Grille des Atouts -->
         <div class="row g-4 text-center justify-content-center">
             
+            <!-- Atout 1 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 card-modern-style">
-                    <div class="icon-dance-container mx-auto mb-4 bg-warning-light text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-modern-style" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02);">
+                    <div class="icon-dance-container mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(204, 164, 59, 0.1); color: var(--kb-gold);">
                         <i class="bi bi-book-half fs-2"></i>
                     </div>
                     <h5 class="fw-bold text-dark mb-2">Spécialisé Kabiyè</h5>
-                    <p class="text-muted small mb-0">La plus grande collection de livres kabiyè disponibles en ligne. <br><em class="text-warning fw-semibold">Kouma yi pɛntɛ</em>.</p>
+                    <p class="text-muted small mb-0">La plus grande collection de livres kabiyè disponibles en ligne. <br><em style="color: var(--kb-gold); font-weight: 600;">Kouma yi pɛntɛ</em>.</p>
                 </div>
             </div>
 
+            <!-- Atout 2 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 card-modern-style" style="animation-delay: 0.15s !important;">
-                    <div class="icon-dance-container mx-auto mb-4 bg-success-light text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-modern-style" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02); animation-delay: 0.15s !important;">
+                    <div class="icon-dance-container mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(10, 92, 54, 0.1); color: var(--kb-green);">
                         <i class="bi bi-lightning-charge fs-2"></i>
                     </div>
                     <h5 class="fw-bold text-dark mb-2">Livraison Rapide</h5>
@@ -741,9 +705,10 @@
                 </div>
             </div>
 
+            <!-- Atout 3 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 card-modern-style" style="animation-delay: 0.3s !important;">
-                    <div class="icon-dance-container mx-auto mb-4 bg-warning-light text-warning rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-modern-style" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02); animation-delay: 0.3s !important;">
+                    <div class="icon-dance-container mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(204, 164, 59, 0.1); color: var(--kb-gold);">
                         <i class="bi bi-phone-vibrate fs-2"></i>
                     </div>
                     <h5 class="fw-bold text-dark mb-2">Paiement Mobile</h5>
@@ -751,13 +716,14 @@
                 </div>
             </div>
 
+            <!-- Atout 4 -->
             <div class="col-lg-3 col-md-6">
-                <div class="card h-100 p-4 border-0 card-modern-style" style="animation-delay: 0.45s !important;">
-                    <div class="icon-dance-container mx-auto mb-4 bg-success-light text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px;">
+                <div class="card h-100 p-4 card-modern-style" style="background: #ffffff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 4px 20px rgba(0,0,0,0.02); animation-delay: 0.45s !important;">
+                    <div class="icon-dance-container mx-auto mb-4 rounded-circle d-flex align-items-center justify-content-center" style="width: 70px; height: 70px; background-color: rgba(10, 92, 54, 0.1); color: var(--kb-green);">
                         <i class="bi bi-globe-africa fs-2"></i>
                     </div>
                     <h5 class="fw-bold text-dark mb-2">Culture Africaine</h5>
-                    <p class="text-muted small mb-0">Valorisons ensemble la richesse et l'histoire culturelle de notre continent. <br><span class="text-success fw-semibold" style="font-style: italic;">Sésélèfou</span>.</p>
+                    <p class="text-muted small mb-0">Valorisons ensemble la richesse et l'histoire culturelle de notre continent. <br><span style="color: var(--kb-green); font-style: italic; font-weight: 600;">Sésélèfou</span>.</p>
                 </div>
             </div>
 
@@ -765,60 +731,6 @@
     </div>
 </section>
 
-<style>
-    /* Fonds d'icônes pastels et modernes */
-    .bg-warning-light { background-color: rgba(255, 193, 7, 0.12) !important; }
-    .bg-success-light { background-color: rgba(25, 135, 84, 0.12) !important; }
-
-    /* Structure des cartes légères et élégantes */
-    .card-modern-style {
-        background: rgba(255, 255, 255, 0.85) !important;
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(0, 0, 0, 0.04) !important;
-        border-radius: 16px !important;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02) !important;
-        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-
-    /* Effet d'élévation classe et épuré au survol */
-    .card-modern-style:hover {
-        transform: translateY(-10px);
-        background: #ffffff !important;
-        border-color: rgba(25, 135, 84, 0.2) !important; /* Bordure verte très subtile */
-        box-shadow: 0 20px 40px rgba(25, 135, 84, 0.08) !important; /* Ombre douce verte */
-    }
-
-    /* Animation fluide de l'icône */
-    .card-modern-style:hover .icon-dance-container {
-        animation: iconPulseDance 0.5s ease-in-out infinite alternate;
-    }
-
-    @keyframes iconPulseDance {
-        0% { transform: scale(1) translateY(0); }
-        100% { transform: scale(1.1) translateY(-4px); }
-    }
-
-    /* Animation de la petite barre sous le titre */
-    .progress-dance-bar {
-        animation: stretchBarDance 4s ease-in-out infinite alternate;
-    }
-
-    @keyframes stretchBarDance {
-        0% { width: 50px; background-color: #ffc107; }
-        100% { width: 100px; background-color: #198754; }
-    }
-
-    /* Flottement lent des auras d'arrière-plan */
-    @keyframes auraFloat {
-        0% { transform: translateY(0px) translateX(0px); }
-        50% { transform: translateY(-20px) translateX(15px); }
-        100% { transform: translateY(0px) translateX(0px); }
-    }
-
-    .row {
-        perspective: 1000px;
-    }
-</style>
 
 <!-- ═══ LIENS UTILES (FAQ, etc.) ══════════════════════════════════════════ -->
 <section class="py-4" style="background:var(--kb-dark,#1a2e1a)">
