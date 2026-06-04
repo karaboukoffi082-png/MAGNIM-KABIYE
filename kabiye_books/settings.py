@@ -136,15 +136,19 @@ WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
 # --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
 import os
-raise ValueError(f"DIAGNOSTIC ENVS -> DATABASE_URL: {os.environ.get('DATABASE_URL')} | DB_HOST: {os.environ.get('DB_HOST')} | DB_NAME: {os.environ.get('DB_NAME')} | DB_USER: {os.environ.get('DB_USER')}")
 
-if env('DATABASE_URL', default=''):
-    print("DATABASE_URL est present, parsing...")
+if env('REAL_DATABASE_URL', default=''):
+    print("REAL_DATABASE_URL est present, utilisation de la connexion specifique...")
+    DATABASES = {
+        'default': env.db('REAL_DATABASE_URL')
+    }
+elif env('DATABASE_URL', default=''):
+    print("DATABASE_URL est present, utilisation de la connexion standard...")
     DATABASES = {
         'default': env.db('DATABASE_URL')
     }
 else:
-    print("DATABASE_URL est absent, fallback sur les variables individuelles...")
+    print("Fallback sur les variables individuelles...")
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
