@@ -9,77 +9,93 @@
 
  
 <!-- ═══ SECTION HERO (BLANC & DORÉ LUMINEUX / PREMIUM) ═══════════════════════════════════════════════════════ -->
-<section class="hero-section d-flex align-items-center py-5 position-relative overflow-hidden" style="background-color: #ffffff; border-bottom: 2px solid rgba(204, 164, 59, 0.2);">
-    <!-- Lueurs d'ambiance d'arrière-plan très subtiles pour le prestige -->
-    <div class="position-absolute rounded-circle opacity-5" style="width: 400px; height: 400px; top: -10%; left: -5%; background-color: var(--kb-gold); filter: blur(100px);"></div>
-    <div class="position-absolute rounded-circle opacity-5" style="width: 300px; height: 300px; bottom: 5%; right: 15%; background-color: var(--kb-green); filter: blur(80px);"></div>
+
+
+<!-- Forçage absolu du fond blanc et intégration de la bordure style Pagne Traditionnel Togolais Or & Blanc -->
+<section class="hero-section d-flex align-items-center py-5 position-relative overflow-hidden" 
+         style="background-color: #e4daa7 !important; background-image: none !important; border-bottom: 10px solid transparent; border-image: repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 6px, var(--kb-gold) 6px, var(--kb-gold) 12px, #ffffff 12px, #ffffff 18px, rgba(204, 164, 59, 0.4) 18px, rgba(204, 164, 59, 0.4) 24px) 10;">
+    
+    <!-- Lueurs géométriques diffuses -->
+    <div class="position-absolute rounded-circle" style="width: 700px; height: 700px; top: -30%; right: -10%; background-color: var(--kb-gold); filter: blur(150px); opacity: 0.03; z-index: 1;"></div>
 
     <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center g-5">
             
             <!-- CONTENU TEXTE (GAUCHE) -->
             <div class="col-lg-7">
-                <p class="fw-bold mb-3 text-uppercase ls-wide d-inline-flex align-items-center bg-light px-3 py-1.5 rounded-pill" style="color: var(--kb-green); letter-spacing: 1.5px; font-size: 0.85rem; border: 1px solid rgba(204, 164, 59, 0.15);">
-                    <span class="me-2">🌍</span> Librairie Africaine en ligne
-                </p>
-                
-                <h1 class="hero-title mb-3" style="color: var(--kb-green); font-weight: 850; line-height: 1.2; letter-spacing: -0.5px;">
-                    <span class="display-4 fw-black d-block" style="letter-spacing: 1px; color: #ffffff;">KABIYE TOM</span>
-                    <span class="fs-2 fw-bold text-secondary d-block mt-1" style="color: rgb(242, 242, 6) !important;">Découvrez les trésors de la</span> 
-                    <span class="fs-1 fw-extrabold d-inline-block position-relative mt-1" style="color: var(--kb-gold); text-shadow: 0px 1px 2px rgba(204, 164, 59, 0.15);">
-                        culture kabiyè
+                <div class="mb-3">
+                    <span class="fw-extrabold text-uppercase px-2 py-1" style="color: var(--kb-gold); letter-spacing: 3px; font-size: 0.75rem; border: 2px solid var(--kb-gold);">
+                        Librairie Africaine de Référence
                     </span>
-                    <span class="fs-2 fw-normal italic-subtitle ms-2" style="color: hsl(60, 19%, 94%); font-style: italic;">&amp; africaine</span>
+                </div>
+                
+                <h1 class="hero-title mb-3" style="font-weight: 800; line-height: 1.2;">
+                    <span class="display-5 fw-bold d-block" style="color: #328039; font-family: serif;">VOTRE SITE CENTRE MAGNIM POUR SERVIR A DISTANCE</span>
+                    <span class="display-3 fw-black d-block my-1" style="letter-spacing: -0.5px; color: var(--kb-gold);">KABIYE TOM</span>
+                    <span class="fs-3 fw-semibold d-block text-secondary">À la découverte de la culture africaine</span>
                 </h1>
                 
-                <p class="hero-subtitle fs-5 mb-4 mt-3" style="color: rgb(248, 250, 252); font-weight: 400; line-height: 1.6;">
-                    Dictionnaires, romans, articles scolaires et culturels.<br>
-                    <span class="px-2 py-0.5 rounded" style="background-color: rgba(204, 164, 59, 0.08); color: var(--kb-gold); font-weight: 600; font-style: italic;">
-                        « Ma culture, ma richesse. »
+                <p class="hero-subtitle fs-5 mb-4 mt-3 text-muted" style="font-weight: 400; line-height: 1.7; max-width: 90%;">
+                    Accédez à notre catalogue exclusif : Dictionnaires spécialisés, romans inspirants, manuels scolaires et œuvres littéraires de référence.
+                    <br>
+                    <span class="d-block mt-2 fw-bold" style="color: #0f172a;">
+                        📚 « Ma culture, ma richesse. »
                     </span>
                 </p>
                 
-                <!-- BOUTONS D'ACTION (Ajustés au survol) -->
+                <!-- BOUTONS D'ACTION (Classiques & Statutaires) -->
                 <div class="d-flex gap-3 flex-wrap mb-4">
-                    <a href="{% url 'boutique' %}" class="btn btn-lg fw-bold px-4 text-white shadow hero-btn-primary" style="background-color: var(--kb-green); border: 2px solid var(--kb-green); transition: all 0.3s ease;">
-                        <i class="bi bi-bag me-2"></i>Explorer la boutique
+                    <a href="{% url 'boutique' %}" class="btn btn-lg fw-bold px-4 text-white rounded-1 shadow" style="background-color: #1e293b; border: 2px solid #1e293b; font-size: 1rem;">
+                        <i class="bi bi-journal-bookmark me-2"></i>Consulter le Catalogue
                     </a>
-                    <a href="{% url 'livres_kabiye' %}" class="btn btn-lg fw-bold px-4 hero-btn-secondary" style="border: 2px solid var(--kb-gold); color: #f6da0b; background-color: transparent; transition: all 0.3s ease;">
-                        📖 Livres Kabiyè <i class="bi bi-arrow-right ms-2" style="color: var(--kb-gold);"></i>
+                    <a href="{% url 'livres_kabiye' %}" class="btn btn-lg fw-bold px-4 rounded-1" style="border: 2px solid var(--kb-gold); color: #1e293b; background-color: rgba(204, 164, 59, 0.05);">
+                        Espace Kabiyè
                     </a>
                 </div>
                 
-                <!-- AVANTAGES DE CONFIANCE (ICÔNES ET LABELS REDESSINÉS) -->
-                <div class="mt-4 pt-2 d-flex gap-4 flex-wrap border-top border-light">
-                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
-                        <i class="bi bi-credit-card-2-front me-2 fs-5" style="color: var(--kb-gold);"></i>Paiement sécurisé
+                <!-- AVANTAGES DE CONFIANCE (Avec Pastilles Or Douces) -->
+                <div class="mt-4 pt-4 d-flex gap-4 flex-wrap border-top" style="border-color: #e2e8f0 !important;">
+                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
+                            <i class="bi bi-check2-circle"></i>
+                        </span>Sécurisé
                     </span>
-                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
-                        <i class="bi bi-truck me-2 fs-5" style="color: var(--kb-gold);"></i>Livraison Togo &amp; International
+                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
+                            <i class="bi bi-globe"></i>
+                        </span>Expédition Monde
                     </span>
-                    <span class="small fw-bold d-flex align-items-center" style="color: #ffffff;">
-                        <i class="bi bi-file-earmark-pdf-fill me-2 fs-5" style="color: var(--kb-gold);"></i>PDF disponibles
+                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
+                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
+                            <i class="bi bi-file-pdf"></i>
+                        </span>Formats Numériques
                     </span>
                 </div>
             </div>
 
-            <!-- VISUEL ENSEIGNE RETROÉCLAIRÉ (DROITE) -->
+            <!-- VISUEL ENSEIGNE - EFFET RONDEUR PARFAITE EN OR (DROITE) -->
             <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
                 <div class="hero-books-visual text-center position-relative">
-                    <!-- Halo lumineux rappelant l'enseigne du Centre Magnim -->
+                    
+                    <!-- Halo de lumière doré 100% rond pour habiller l'arrière du logo -->
                     <div class="position-absolute top-50 start-50 translate-middle rounded-circle" 
-                         style="width: 320px; height: 320px; background: radial-gradient(circle, rgba(204,164,59,0.2) 0%, rgba(255,255,255,0) 70%); z-index: 1;">
+                         style="width: 360px; height: 360px; background: radial-gradient(circle, rgba(204,164,59,0.15) 0%, rgba(255,255,255,0) 70%); z-index: 1;">
+                    </div>
+                    
+                    <!-- Deuxième cercle en pointillés dorés très fin et élégant -->
+                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" 
+                         style="width: 340px; height: 340px; border: 1.5px dashed rgba(204, 164, 59, 0.35); z-index: 1;">
                     </div>
                     
                     <div class="position-relative" style="z-index: 2;">
                         {% if magnim_img %}
                         <img src="{{ magnim_img }}" alt="KabiyèBooks Magnim"
-                             class="img-fluid rounded-circle img-enseigne-premium"
-                             style="width: 310px; height: 310px; object-fit: cover; border: 6px solid #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.25) !important;">
+                             class="img-fluid rounded-circle"
+                             style="width: 310px; height: 310px; object-fit: cover; border: 4px solid var(--kb-gold); padding: 4px; background-color: #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);">
                         {% else %}
                         <img src="{% static 'img/logo.jpeg' %}" alt="Magnim — Ma culture, ma richesse" 
-                             class="img-fluid rounded-circle bg-white p-1 img-enseigne-premium" 
-                             style="width: 310px; height: 310px; object-fit: cover; border: 6px solid #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.25) !important;">
+                             class="img-fluid rounded-circle bg-white" 
+                             style="width: 310px; height: 310px; object-fit: cover; border: 4px solid var(--kb-gold); padding: 4px; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);">
                         {% endif %}
                     </div>
                 </div>
