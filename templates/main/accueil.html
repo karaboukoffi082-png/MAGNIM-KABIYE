@@ -12,159 +12,219 @@
 
 
 <!-- Forçage absolu du fond blanc et intégration de la bordure style Pagne Traditionnel Togolais Or & Blanc -->
-<section class="hero-section d-flex align-items-center py-5 position-relative overflow-hidden" 
-         style="background-color: #e4daa7 !important; background-image: none !important; border-bottom: 10px solid transparent; border-image: repeating-linear-gradient(45deg, #ffffff 0px, #ffffff 6px, var(--kb-gold) 6px, var(--kb-gold) 12px, #ffffff 12px, #ffffff 18px, rgba(204, 164, 59, 0.4) 18px, rgba(204, 164, 59, 0.4) 24px) 10;">
-    
-    <!-- Lueurs géométriques diffuses -->
-    <div class="position-absolute rounded-circle" style="width: 700px; height: 700px; top: -30%; right: -10%; background-color: var(--kb-gold); filter: blur(150px); opacity: 0.03; z-index: 1;"></div>
+<section class="hero-section position-relative overflow-hidden"
+style="
+background:
+linear-gradient(rgba(6,25,18,.35), rgba(6,25,18,.35)),
+url('{% static "img/CENTRE3.JPEG" %}') center/cover no-repeat;
+min-height:95vh;
+display:flex;
+align-items:center;">
 
-    <div class="container position-relative" style="z-index: 2;">
-        <div class="row align-items-center g-5">
-            
-            <!-- CONTENU TEXTE (GAUCHE) -->
-            <div class="col-lg-7">
-                <div class="mb-3">
-                    <span class="fw-extrabold text-uppercase px-2 py-1" style="color: var(--kb-gold); letter-spacing: 3px; font-size: 0.75rem; border: 2px solid var(--kb-gold);">
-                        Librairie Africaine de Référence
-                    </span>
-                </div>
-                
-                <h1 class="hero-title mb-3" style="font-weight: 800; line-height: 1.2;">
-                    <span class="display-5 fw-bold d-block" style="color: #328039; font-family: serif;">VOTRE SITE CENTRE MAGNIM POUR SERVIR A DISTANCE</span>
-                    <span class="display-3 fw-black d-block my-1" style="letter-spacing: -0.5px; color: var(--kb-gold);">KABIYE TOM</span>
-                    <span class="fs-3 fw-semibold d-block text-secondary">À la découverte de la culture africaine</span>
-                </h1>
-                
-                <p class="hero-subtitle fs-5 mb-4 mt-3 text-muted" style="font-weight: 400; line-height: 1.7; max-width: 90%;">
-                    Accédez à notre catalogue exclusif : Dictionnaires spécialisés, romans inspirants, manuels scolaires et œuvres littéraires de référence.
-                    <br>
-                    <span class="d-block mt-2 fw-bold" style="color: #0f172a;">
-                        📚 « Ma culture, ma richesse. »
-                    </span>
-                </p>
-                
-                <!-- BOUTONS D'ACTION (Classiques & Statutaires) -->
-                <div class="d-flex gap-3 flex-wrap mb-4">
-                    <a href="{% url 'boutique' %}" class="btn btn-lg fw-bold px-4 text-white rounded-1 shadow" style="background-color: #1e293b; border: 2px solid #1e293b; font-size: 1rem;">
-                        <i class="bi bi-journal-bookmark me-2"></i>Consulter le Catalogue
-                    </a>
-                    <a href="{% url 'livres_kabiye' %}" class="btn btn-lg fw-bold px-4 rounded-1" style="border: 2px solid var(--kb-gold); color: #1e293b; background-color: rgba(204, 164, 59, 0.05);">
-                        Espace Kabiyè
-                    </a>
-                </div>
-                
-                <!-- AVANTAGES DE CONFIANCE (Avec Pastilles Or Douces) -->
-                <div class="mt-4 pt-4 d-flex gap-4 flex-wrap border-top" style="border-color: #e2e8f0 !important;">
-                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
-                            <i class="bi bi-check2-circle"></i>
-                        </span>Sécurisé
-                    </span>
-                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
-                            <i class="bi bi-globe"></i>
-                        </span>Expédition Monde
-                    </span>
-                    <span class="small fw-bold d-flex align-items-center" style="color: #334155;">
-                        <span class="d-inline-flex align-items-center justify-content-center rounded-circle me-2" style="width: 32px; height: 32px; background: rgba(204, 164, 59, 0.15); color: var(--kb-gold);">
-                            <i class="bi bi-file-pdf"></i>
-                        </span>Formats Numériques
-                    </span>
-                </div>
-            </div>
+<div class="container">
 
-            <!-- VISUEL ENSEIGNE - EFFET RONDEUR PARFAITE EN OR (DROITE) -->
-            <div class="col-lg-5 d-none d-lg-flex justify-content-center align-items-center">
-                <div class="hero-books-visual text-center position-relative">
-                    
-                    <!-- Halo de lumière doré 100% rond pour habiller l'arrière du logo -->
-                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" 
-                         style="width: 360px; height: 360px; background: radial-gradient(circle, rgba(204,164,59,0.15) 0%, rgba(255,255,255,0) 70%); z-index: 1;">
-                    </div>
-                    
-                    <!-- Deuxième cercle en pointillés dorés très fin et élégant -->
-                    <div class="position-absolute top-50 start-50 translate-middle rounded-circle" 
-                         style="width: 340px; height: 340px; border: 1.5px dashed rgba(204, 164, 59, 0.35); z-index: 1;">
-                    </div>
-                    
-                    <div class="position-relative" style="z-index: 2;">
-                        {% if magnim_img %}
-                        <img src="{{ magnim_img }}" alt="KabiyèBooks Magnim"
-                             class="img-fluid rounded-circle"
-                             style="width: 310px; height: 310px; object-fit: cover; border: 4px solid var(--kb-gold); padding: 4px; background-color: #ffffff; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);">
-                        {% else %}
-                        <img src="{% static 'img/logo.jpeg' %}" alt="Magnim — Ma culture, ma richesse" 
-                             class="img-fluid rounded-circle bg-white" 
-                             style="width: 310px; height: 310px; object-fit: cover; border: 4px solid var(--kb-gold); padding: 4px; box-shadow: 0 15px 35px rgba(204, 164, 59, 0.12);">
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </div>
+<div class="row align-items-center">
+
+<!--======================
+TEXTE
+=======================-->
+
+<div class="col-lg-6 text-white">
+
+<span class="badge px-3 py-2 mb-4"
+style="
+background:#d4af37;
+color:#000;
+font-size:15px;">
+Première Librairie Kabiyè
+</span>
+
+<h1 class="display-3 fw-bold mb-4">
+
+MAGNIM
+
+<span class="d-block"
+style="color:#d4af37;">
+KABIYÈBOOKS
+</span>
+
+</h1>
+
+<p class="lead mb-4">
+
+Découvrez des centaines de livres,
+dictionnaires,
+romans,
+documents historiques,
+manuels scolaires
+et œuvres africaines.
+
+</p>
+
+<div class="d-flex gap-3 flex-wrap">
+
+<a href="{% url 'boutique' %}"
+class="btn btn-warning btn-lg px-5 shadow">
+
+<i class="bi bi-book-half"></i>
+
+Explorer la Boutique
+
+</a>
+
+<a href="{% url 'livres_kabiye' %}"
+class="btn btn-outline-light btn-lg px-5">
+
+Découvrir Kabiyè
+
+</a>
+
+</div>
+
+<div class="row mt-5">
+
+<div class="col-4">
+
+<h2 class="fw-bold text-warning">
+500+
+</h2>
+
+<p>Livres</p>
+
+</div>
+
+<div class="col-4">
+
+<h2 class="fw-bold text-warning">
+40+
+</h2>
+
+<p>Auteurs</p>
+
+</div>
+
+<div class="col-4">
+
+<h2 class="fw-bold text-warning">
+24/7
+</h2>
+
+<p>Disponible</p>
+
+</div>
+
+</div>
+
+</div>
+
+<!--======================
+IMAGE
+=======================-->
+
+<div class="col-lg-6 text-center">
+
+<div
+style="
+position:relative;
+display:inline-block;">
+
+<div
+style="
+position:absolute;
+width:450px;
+height:450px;
+background:#d4af37;
+filter:blur(90px);
+opacity:.25;
+border-radius:50%;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+">
+</div>
+
+<img
+src="{% static 'img/CENTRE5.JPEG' %}"
+class="img-fluid position-relative"
+
+style="
+max-width:500px;
+animation:float 5s ease-in-out infinite;
+">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
 </section>
 
 
 <!-- ═══ MAGNIM — MISSION CULTURELLE ════════════════════════════════════════ -->
-<section class="py-5" style="background: linear-gradient(135deg, #faf7f2, #fff);">
+<section class="py-5" style="background: linear-gradient(135deg, #faf7f2 0%, #ffffff 50%, #f7f3eb 100%);">
     <div class="container text-center">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
                 
-                <!-- Boîte du Carrousel Élargie (Contient les 4 images qui défilent) -->
-                <div class="mb-4 d-inline-block shadow bg-white p-3 rounded-3" style="max-width: 450px; width: 100%;">
+                <!-- Boîte du Carrousel avec bordure et ombre dorée -->
+                <div class="mb-4 d-inline-block bg-white p-3 rounded-4" 
+                     style="max-width: 450px; width: 100%; border: 1px solid rgba(212, 175, 55, 0.3); box-shadow: 0 10px 30px rgba(184, 134, 11, 0.15);">
                     
                     {% if logo_img %}
-                        <img src="{{ logo_img }}" alt="Magnim — KabiyèBooks" class="img-fluid rounded-2" style="width: 100%; height: auto; object-fit: contain; display: block;">
+                        <img src="{{ logo_img }}" alt="Magnim — KabiyèBooks" class="img-fluid rounded-3" style="width: 100%; height: auto; object-fit: contain; display: block;">
                     {% else %}
-                        <!-- Début du Carrousel Bootstrap automatique -->
+                        <!-- Carrousel Bootstrap automatique -->
                         <div id="magnimCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
-                            <div class="carousel-inner rounded-2">
+                            <div class="carousel-inner rounded-3">
                                 
-                                <!-- Image 1 (Active par défaut) -->
-                                <div class="carousel-item active">
-                                    <img src="{% static 'img/magnim4.jpeg' %}" alt="Magnim — Ma culture" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
+                                <div class="carousel-item active">ù¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^' %}" alt="Magnim — Ma culture" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
                                 </div>
                                 
-                                <!-- Image 2 -->
                                 <div class="carousel-item">
-                                    <img src="{% static 'img/magnim18.jpeg' %}" alt="Magnim — Littérature" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
+                                    <img src="{% static 'img/CENTRE8.JPEG' %}" alt="Magnim — Littérature" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
                                 </div>
                                 
-                                <!-- Image 3 -->
                                 <div class="carousel-item">
-                                    <img src="{% static 'img/magnim.jpeg' %}" alt="Magnim — Patrimoine" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
+                                    <img src="{% static 'img/KAMOU1.PNG' %}" alt="Magnim — Patrimoine" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
                                 </div>
                                 
-                                <!-- Image 4 -->
                                 <div class="carousel-item">
-                                    <img src="{% static 'img/magnim2.jpeg' %}" alt="Magnim — KabiyèBooks" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
+                                    <img src="{% static 'img/KONDONA.PNG' %}" alt="Magnim — KabiyèBooks" class="img-fluid d-block w-100" style="height: auto; object-fit: contain;">
                                 </div>
 
                             </div>
                         </div>
-                        <!-- Fin du Carrousel -->
                     {% endif %}
                     
                 </div>
                 
-                <!-- Titre et Slogan de marque -->
-                <h2 class="fw-bold display-5 mb-1" style="color: #1a2e1a;">MAGNIM</h2>
-                <p class="fw-semibold fs-4 mb-3" style="color: var(--kb-green, #1a5c38);">« Ma culture, ma Richesse. »</p>
+                <!-- Titre principal -->
+                <h2 class="fw-bold display-5 mb-1" style="color: #1a2e1a; letter-spacing: 2px;">MAGNIM</h2>
                 
-                <!-- Ligne de séparation décorative dorée -->
-                <div class="mx-auto bg-warning my-4" style="width: 80px; height: 4px; border-radius: 2px;"></div>
-                
-                <!-- Texte de présentation culturel enrichi -->
-                <p class="text-muted lead fs-5 px-3">
-                    À travers <strong>KabiyèBooks</strong>, nous portons fièrement les valeurs de l'identité, de la littérature et du patrimoine kabiyè &amp; africain. Découvrez notre collection unique de livres pour nourrir votre esprit et célébrer nos racines.
-                    <br><span style="color: var(--kb-green, #1a5c38); font-style: italic;">Régbékpé — ensemble</span>, célébrons notre histoire.
+                <!-- Slogan avec touche dorée -->
+                <p class="fw-semibold fs-4 mb-3" style="color: #1a5c38;">
+                    « Ma culture, <span style="background: linear-gradient(45deg, #b8860b, #d4af37, #aa7c11); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;">ma Richesse.</span> »
                 </p>
                 
-                <!-- Bouton d'action principal -->
+                <!-- Ligne de séparation décorative dorée -->
+                <div class="mx-auto my-4" style="width: 90px; height: 3px; background: linear-gradient(90deg, transparent, #d4af37, transparent);"></div>
+                
+                <!-- Texte de présentation -->
+                <p class="text-muted lead fs-5 px-3" style="line-height: 1.7;">
+                    À travers <strong style="color: #1a2e1a;">KabiyèBooks</strong>, nous portons fièrement les valeurs de l'identité, de la littérature et du patrimoine kabiyè &amp; africain. Découvrez notre collection unique de livres pour nourrir votre esprit et célébrer nos racines.
+                    <br><span class="d-block mt-2" style="color: #1a5c38; font-style: italic; font-weight: 500;">Régbékpé — ensemble, célébrons notre histoire.</span>
+                </p>
+                
+                <!-- Bouton d'action principal doré avec effet de survol -->
                 <div class="mt-4">
-                    <a href="{% url 'boutique' %}" class="btn btn-warning btn-lg px-4 fw-bold shadow-sm">
+                    <a href="{% url 'boutique' %}" 
+                       class="btn btn-lg px-4 py-3 fw-bold text-white shadow"
+                       style="background: linear-gradient(135deg, #d4af37 0%, #b8860b 100%); border: none; border-radius: 50px; transition: all 0.3s ease;"
+                       onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(184, 134, 11, 0.4)';"
+                       onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 10px rgba(0,0,0,0.155)';">
                         <i class="bi bi-book-half me-2"></i> Explorer la boutique
                     </a>
                 </div>
