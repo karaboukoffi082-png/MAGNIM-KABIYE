@@ -1,37 +1,35 @@
 import os
-import environ
+import sys
+import secrets
 from pathlib import Path
+import environ
 
-# Définition du dossier racine du projet
+# --- DOSSIER RACINE DU PROJET ---
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Initialisation de django-environ
+# --- INITIALISATION DJANGO-ENVIRON ---
 env = environ.Env(
-    DEBUG=(bool, False)  # Par défaut, False si la variable n'est pas trouvée
+    DEBUG=(bool, False)
 )
 
-# Lecture du fichier .env
-environ.Env.read_env(str(BASE_DIR / '.env'))
+# Lecture du fichier .env s'il existe
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    environ.Env.read_env(str(env_file))
 
 # --- SÉCURITÉ ET CONFIGURATION DE BASE ---
-SECRET_KEY = env('SECRET_KEY', default='')
-if not SECRET_KEY:
-    import os
-    import secrets
-    print("=== DEBUG ENV KEYS ===")
-    print("Clés d'environnement disponibles dans le conteneur :")
-    print(sorted(list(os.environ.keys())))
-    print("=======================")
-    # Génération d'une clé temporaire pour éviter le crash au démarrage si absente sur Dokploy
-    SECRET_KEY = secrets.token_hex(24)
-    print("ATTENTION : SECRET_KEY manquante. Une clé temporaire aléatoire a été générée pour le démarrage.")
 DEBUG = env.bool('DEBUG', default=False)
 
-# Configuration des hôtes autorisés (Sécurité renforcée en production via le .env)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'] if DEBUG else [])
+SECRET_KEY = env('SECRET_KEY', default='')
+if not SECRET_KEY:
+    print("=== WARNING: SECRET_KEY non définie dans l'environnement ===")
+    SECRET_KEY = secrets.token_hex(24)
+    if not DEBUG:
+        print("ATTENTION : Génération d'une SECRET_KEY temporaire en production. Les sessions seront réinitialisées à chaque redémarrage !")
 
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '0.0.0.0'] if DEBUG else ['.centremagnim.com'])
 
-# --- CONFIGURATION SÉCURITÉ (S'adapte automatiquement local VS production) ---
+# --- SÉCURITÉ HTTPS & CSRF ---
 if DEBUG:
     CSRF_TRUSTED_ORIGINS = [
         "http://127.0.0.1:8000",
@@ -41,52 +39,36 @@ if DEBUG:
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
 else:
-    # Paramètres recommandés pour Hostinger en HTTPS
     CSRF_TRUSTED_ORIGINS = env.list('CSRF_TRUSTED_ORIGINS', default=[
         "https://centremagnim.com",
         "https://www.centremagnim.com",
     ])
+    CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', default=True)
+    SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
     
-    # CORRECTION CRUCIALE : On désactive la sécurité stricte des cookies SI on travaille sur une IP locale
-    # Cela permet de tester le mode "Production locale" dans VS Code sans bloquer le CSRF.
-    import sys
-    is_local_run = any(addr in sys.argv for addr in ['127.0.0.1:8000', 'localhost:8000', 'runserver'])
-    
-    if is_local_run:
-        CSRF_TRUSTED_ORIGINS += ["http://127.0.0.1:8000", "http://localhost:8000", "http://0.0.0.0:8000"]
-        CSRF_COOKIE_SECURE = False
-        SESSION_COOKIE_SECURE = False
-    else:
-        CSRF_COOKIE_SECURE = env.bool('CSRF_COOKIE_SECURE', default=True)
-        SESSION_COOKIE_SECURE = env.bool('SESSION_COOKIE_SECURE', default=True)
-        
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True
-    
-    # Indispensable pour éviter les boucles de redirection HTTPS sur Hostinger
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False) # Reste à False en local
+    SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=True)
 
 # --- APPLICATIONS INSTALLÉES ---
 INSTALLED_APPS = [
-    "whitenoise.runserver_nostatic", # Gestion parfaite des fichiers statiques en dev
+    "whitenoise.runserver_nostatic",  # Gestion des statiques en dev
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
-    
     "django.contrib.staticfiles",
-    "cloudinary_storage",            
+    "cloudinary_storage",
 
-    
     # Librairies tierces
     "rest_framework",
     "corsheaders",
     "crispy_forms",
     "crispy_bootstrap5",
-    
-    # Applications du projet (KabiyèBooks - MAGNIM)
+
+    # Applications du projet
     "main",
     "gestion_utilisateurs",
     "gestion_livres",
@@ -101,9 +83,9 @@ INSTALLED_APPS = [
 # --- MIDDLEWARES ---
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # Fichiers statiques autonomes
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # Directement après SecurityMiddleware
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "corsheaders.middleware.CorsMiddleware",  # Au-dessus de CommonMiddleware
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -113,7 +95,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "kabiye_books.urls"
 
-# --- MOTEUR DE TEMPLATES ---
+# --- TEMPLATES ---
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -134,21 +116,14 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "kabiye_books.wsgi.application"
 
-# --- BASE DE DONNÉES (PostgreSQL ou SQLite par défaut) ---
-import os
+# --- BASE DE DONNÉES ---
+DATABASE_URL = env('REAL_DATABASE_URL', default='') or env('DATABASE_URL', default='')
 
-if env('REAL_DATABASE_URL', default=''):
-    print("REAL_DATABASE_URL est present, utilisation de la connexion specifique...")
+if DATABASE_URL:
     DATABASES = {
-        'default': env.db('REAL_DATABASE_URL')
+        'default': env.db_url_config(DATABASE_URL)
     }
-elif env('DATABASE_URL', default=''):
-    print("DATABASE_URL est present, utilisation de la connexion standard...")
-    DATABASES = {
-        'default': env.db('DATABASE_URL')
-    }
-else:
-    print("Fallback sur les variables individuelles...")
+elif not DEBUG:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -159,8 +134,14 @@ else:
             "PORT": env('DB_PORT', default='5432'),
         }
     }
-print("Configuration DATABASES finale :", {k: (v if k != 'PASSWORD' else '********') for k, v in DATABASES['default'].items()})
-print("==============================")
+else:
+    # Mode développement local : fallback SQLite
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # --- VALIDATION DES MOTS DE PASSE ---
 AUTH_PASSWORD_VALIDATORS = [
@@ -170,7 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
-# --- INTERNATIONALISATION (Configuré sur Lomé, Togo) ---
+# --- INTERNATIONALISATION ---
 LANGUAGE_CODE = "fr-fr"
 TIME_ZONE = "Africa/Lome"
 USE_I18N = True
@@ -181,26 +162,60 @@ STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
 
-# L'optimisation du stockage WhiteNoise est gérée dans l'objet STORAGES ci-dessous
-
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# --- CONFIGURATION STORAGES (DJANGO 4.2+) ---
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
+    'API_KEY': env('CLOUDINARY_API_KEY', default=''),
+    'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
+}
+
+STORAGE_DEFAULT = (
+    "cloudinary_storage.storage.MediaCloudinaryStorage"
+    if CLOUDINARY_STORAGE['CLOUD_NAME']
+    else "django.core.files.storage.FileSystemStorage"
+)
+
+STORAGE_STATIC = (
+    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    if not DEBUG
+    else "django.contrib.staticfiles.storage.StaticFilesStorage"
+)
+
+STORAGES = {
+    "default": {
+        "BACKEND": STORAGE_DEFAULT,
+    },
+    "staticfiles": {
+        "BACKEND": STORAGE_STATIC,
+    },
+}
+
+# Compatibilité legacy pour certaines dépendances tierces
+DEFAULT_FILE_STORAGE = STORAGE_DEFAULT
+STATICFILES_STORAGE = STORAGE_STATIC
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# --- CONFIGURATION DES COMPTES & AUTHENTIFICATION ---
+# --- AUTHENTIFICATION ---
 AUTH_USER_MODEL = "gestion_utilisateurs.Utilisateur"
-
 LOGIN_URL = "/utilisateurs/connexion/"
 LOGIN_REDIRECT_URL = "/tableau-de-bord/"
 LOGOUT_REDIRECT_URL = "/"
 
-# --- CONFIGURATION CRISPY FORMS BOOTSTRAP 5 ---
+# --- CRISPY FORMS ---
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# --- CONFIGURATION CORS & REST FRAMEWORK ---
-CORS_ALLOW_ALL_ORIGINS = True  # À passer à False en prod en listant tes origines réelles
+# --- CORS & REST FRAMEWORK ---
+CORS_ALLOW_ALL_ORIGINS = DEBUG
+if not DEBUG:
+    CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
+        "https://centremagnim.com",
+        "https://www.centremagnim.com",
+    ])
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
@@ -213,48 +228,10 @@ REST_FRAMEWORK = {
     "PAGE_SIZE": 12,
 }
 
-# --- CONFIGURATION STORAGE (CLOUDINARY & WHITENOISE) ---
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
-    'API_KEY': env('CLOUDINARY_API_KEY', default=''),
-    'API_SECRET': env('CLOUDINARY_API_SECRET', default=''),
-}
-CLOUDINARY_STORAGE['STATICFILES_STORAGE'] = None
-
-# Utilisation de Cloudinary si configuré, sinon repli sur le système de fichiers local
-if CLOUDINARY_STORAGE['CLOUD_NAME']:
-    STORAGES = {
-        "default": {
-            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-else:
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
-
-# Compatibilité avec django-cloudinary-storage (requis pour collectstatic de cette lib)
-STATICFILES_STORAGE = STORAGES["staticfiles"]["BACKEND"]
-DEFAULT_FILE_STORAGE = STORAGES["default"]["BACKEND"]
-
-
-# =====================================================================
-# --- APIS DE PAIEMENTS AFRICAINES ---
-# =====================================================================
-
-# --- BKAPAY (legacy) ---
+# --- PAIEMENTS ---
 BKAPAY_PUBLIC_KEY = env('BKAPAY_PUBLIC_KEY', default='')
 BKAPAY_SECRET_WEBHOOK = env('BKAPAY_SECRET_WEBHOOK', default='')
 
-# --- CASHPAY (SEMOA API v3 pour T-Money & Flooz au Togo) ---
 CASHPAY_CLIENT_ID = env('CASHPAY_CLIENT_ID', default='')
 CASHPAY_CLIENT_SECRET = env('CASHPAY_CLIENT_SECRET', default='')
 CASHPAY_USERNAME = env('CASHPAY_USERNAME', default='')
@@ -262,10 +239,7 @@ CASHPAY_PASSWORD = env('CASHPAY_PASSWORD', default='')
 CASHPAY_API_BASE_URL = env('CASHPAY_API_BASE_URL', default='https://api.semoa-payments.ovh/sandbox-v3')
 CASHPAY_SECRET_WEBHOOK = env('CASHPAY_SECRET_WEBHOOK', default='')
 
-
-# =====================================================================
-# --- CONFIGURATION EMAILS TRANSITIONNELLE (BREVO SMTP) ---
-# =====================================================================
+# --- EMAILS (BREVO SMTP) ---
 if DEBUG:
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
@@ -277,22 +251,16 @@ else:
     EMAIL_TIMEOUT = env.int('EMAIL_TIMEOUT', default=20)
     EMAIL_FAIL_SILENTLY = False
 
-    # Identification SMTP
     EMAIL_HOST_USER = env('BREVO_SMTP_LOGIN', default='') or env('EMAIL_HOST_USER', default='')
     EMAIL_HOST_PASSWORD = env('BREVO_SMTP_KEY', default='') or env('EMAIL_HOST_PASSWORD', default='')
 
-# Gestionnaires de l'expéditeur d'e-mails
 BREVO_FROM_EMAIL = env('BREVO_FROM_EMAIL', default='centremagnim@gmail.com')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default=f'KabiyèBooks <{BREVO_FROM_EMAIL}>')
 SERVER_EMAIL = env('SERVER_EMAIL', default=DEFAULT_FROM_EMAIL)
 
-# Sécurité token reset mot de passe (24h)
 PASSWORD_RESET_TIMEOUT = env.int('PASSWORD_RESET_TIMEOUT', default=86400)
 
-
-# =====================================================================
-# --- LIENS OFFICIELS RÉSEAUX SOCIAUX (MAGNIM) ---
-# =====================================================================
+# --- RÉSEAUX SOCIAUX ---
 WHATSAPP_NUMBER = env('WHATSAPP_NUMBER', default='22870766060')
 FACEBOOK_URL = env('FACEBOOK_URL', default='https://www.facebook.com/centremagnim')
 TWITTER_URL = env('TWITTER_URL', default='https://twitter.com/centremagnim')
