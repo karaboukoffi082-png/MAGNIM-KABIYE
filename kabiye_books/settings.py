@@ -165,7 +165,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Ignore l'absence de fichiers référençés (.map, sourcemaps) pendant collectstatic
+# Ignorer le mode strict pour éviter les erreurs de sourcemaps
 WHITENOISE_MANIFEST_STRICT = False
 
 # --- CONFIGURATION STORAGES (DJANGO 4.2+) ---
@@ -181,8 +181,9 @@ STORAGE_DEFAULT = (
     else "django.core.files.storage.FileSystemStorage"
 )
 
+# Utilisation de CompressedStaticFilesStorage pour éviter l'échec sur les fichiers .map manquants
 STORAGE_STATIC = (
-    "whitenoise.storage.CompressedManifestStaticFilesStorage"
+    "whitenoise.storage.CompressedStaticFilesStorage"
     if not DEBUG
     else "django.contrib.staticfiles.storage.StaticFilesStorage"
 )
