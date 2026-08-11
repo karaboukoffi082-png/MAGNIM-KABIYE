@@ -27,7 +27,7 @@ if not SECRET_KEY:
     if not DEBUG:
         print("ATTENTION : Génération d'une SECRET_KEY temporaire en production. Les sessions seront réinitialisées à chaque redémarrage !")
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '0.0.0.0'] if DEBUG else ['.centremagnim.com'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost', '0.0.0.0'] if DEBUG else ['centremagnim.com', 'www.centremagnim.com', '.centremagnim.com'])
 
 # --- SÉCURITÉ HTTPS & CSRF ---
 if DEBUG:
@@ -165,6 +165,9 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
+# Ignore l'absence de fichiers référençés (.map, sourcemaps) pendant collectstatic
+WHITENOISE_MANIFEST_STRICT = False
+
 # --- CONFIGURATION STORAGES (DJANGO 4.2+) ---
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env('CLOUDINARY_CLOUD_NAME', default=''),
@@ -193,7 +196,7 @@ STORAGES = {
     },
 }
 
-# Compatibilité legacy pour certaines dépendances tierces
+# Compatibilité legacy
 DEFAULT_FILE_STORAGE = STORAGE_DEFAULT
 STATICFILES_STORAGE = STORAGE_STATIC
 
