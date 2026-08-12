@@ -120,10 +120,12 @@ WSGI_APPLICATION = "kabiye_books.wsgi.application"
 DATABASE_URL = env('REAL_DATABASE_URL', default='') or env('DATABASE_URL', default='')
 
 if DATABASE_URL:
+    # URL de connexion PostgreSQL (ex: transmise par Dokploy/Heroku)
     DATABASES = {
         'default': env.db_url_config(DATABASE_URL)
     }
-elif not DEBUG:
+elif env('DB_PASSWORD', default=''):
+    # Connexion PostgreSQL explicite via variables d'environnement
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
@@ -135,7 +137,7 @@ elif not DEBUG:
         }
     }
 else:
-    # Mode développement local : fallback SQLite
+    # Mode développement local / fallback SQLite si aucune info Postgres disponible
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
