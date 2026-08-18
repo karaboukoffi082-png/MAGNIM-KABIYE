@@ -11,83 +11,106 @@
 
 <!-- Forçage absolu du fond blanc et intégration de la bordure style Pagne Traditionnel Togolais Or & Blanc -->
 <section class="hero-section position-relative overflow-hidden" style="
-  background: 
-    linear-gradient(rgba(6, 25, 18, 0.35), rgba(6, 25, 18, 0.35)), 
-    url('{% static "img/CENTRE3.jpeg" %}') center/cover no-repeat;
-  min-height: 95vh;
+  background: linear-gradient(135deg, #fceabb 0%, #f8b500 50%, #d4af37 100%);
+  min-height: 85vh;
   display: flex;
   align-items: center;
+  border-bottom: 4px solid #8b5a2b;
 ">
-  <div class="container">
-    <div class="row align-items-center">
+  <div class="container py-5">
+    <div class="row align-items-center justify-content-center text-center">
 
       <!--======================
-      TEXTE
+      TEXTE ET DESIGN DORÉ
       =======================-->
-      <div class="col-lg-6 text-white">
-        <span class="badge px-3 py-2 mb-4" style="background: #d4af37; color: #000; font-size: 15px;">
-          Première Librairie Kabiyè
+      <div class="col-lg-10">
+        
+        <!-- Badge -->
+        <span class="badge px-4 py-2 mb-3 shadow-sm" style="
+          background: #3d2314;
+          color: #f3e5ab;
+          font-size: 15px;
+          letter-spacing: 1.5px;
+          border: 1px solid #d4af37;
+        ">
+          PREMIÈRE LIBRAIRIE KABIYÈ
         </span>
 
-        <h1 class="display-3 fw-bold mb-4">
+        <!-- Titre Principal -->
+        <h1 class="display-3 fw-extrabold mb-2" style="
+          color: #2b1509; 
+          text-transform: uppercase; 
+          letter-spacing: 2px;
+          font-weight: 900;
+        ">
           MAGNIM
-          <span class="d-block" style="color: #d4af37;">
+          <span class="d-block" style="color: #6b3e11;">
             KABIYÈBOOKS
           </span>
         </h1>
 
-        <p class="lead mb-4">
-          Découvrez des centaines de livres, dictionnaires, romans, documents historiques, manuels scolaires et œuvres africaines.
+        <!-- Slogan Affiche -->
+        <p class="fs-4 fw-bold mb-3" style="color: #4a2810; font-style: italic;">
+          « La connaissance à portée de main ! »
         </p>
 
-        <div class="d-flex gap-3 flex-wrap">
-          <a href="{% url 'boutique' %}" class="btn btn-warning btn-lg px-5 shadow">
-            <i class="bi bi-book-half"></i> Explorer la Boutique
+        <!-- Bandeau Citation / Engagements -->
+        <div class="p-3 my-4 mx-auto rounded shadow-sm" style="
+          background: rgba(61, 35, 20, 0.9); 
+          color: #f3e5ab; 
+          max-width: 700px;
+          border: 2px solid #2b1509;
+        ">
+          <p class="m-0 fw-bold text-uppercase" style="letter-spacing: 1px;">
+            Préservons notre langue, valorisons notre identité.
+          </p>
+        </div>
+
+        <!-- Description -->
+        <p class="lead mb-4 fw-semibold mx-auto" style="color: #2b1509; max-width: 800px;">
+          Découvrez des centaines de livres, dictionnaires (plus de 10 000 mots et expressions), romans, documents historiques, manuels scolaires et œuvres africaines.
+        </p>
+
+        <!-- Boutons d'action -->
+        <div class="d-flex gap-3 flex-wrap justify-content-center mb-5">
+          <a href="{% url 'boutique' %}" class="btn btn-lg px-5 shadow fw-bold" style="
+            background: #2b1509;
+            color: #f3e5ab;
+            border: 2px solid #6b3e11;
+            border-radius: 8px;
+          ">
+            <i class="bi bi-book-half me-2"></i> Explorer la Boutique
           </a>
-          <a href="{% url 'livres_kabiye' %}" class="btn btn-outline-light btn-lg px-5">
+          <a href="{% url 'livres_kabiye' %}" class="btn btn-lg px-5 fw-bold" style="
+            color: #2b1509;
+            border: 2px solid #2b1509;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+          ">
             Découvrir Kabiyè
           </a>
         </div>
 
-        <div class="row mt-5">
-          <div class="col-4">
-            <h2 class="fw-bold text-warning">500+</h2>
-            <p>Livres</p>
+        <!-- Chiffres clés & Avantages de l'affiche -->
+        <div class="row pt-4 justify-content-center" style="border-top: 2px solid rgba(43, 21, 9, 0.2);">
+          <div class="col-md-3 col-6 mb-3">
+            <h2 class="fw-bold m-0" style="color: #2b1509;">10 000+</h2>
+            <p class="fw-semibold m-0" style="color: #4a2810;">Mots & Expressions</p>
           </div>
-          <div class="col-4">
-            <h2 class="fw-bold text-warning">40+</h2>
-            <p>Auteurs</p>
+          <div class="col-md-3 col-6 mb-3">
+            <h2 class="fw-bold m-0" style="color: #2b1509;">500+</h2>
+            <p class="fw-semibold m-0" style="color: #4a2810;">Livres Disponibles</p>
           </div>
-          <div class="col-4">
-            <h2 class="fw-bold text-warning">24/7</h2>
-            <p>Disponible</p>
+          <div class="col-md-3 col-6 mb-3">
+            <h2 class="fw-bold m-0" style="color: #2b1509;">40+</h2>
+            <p class="fw-semibold m-0" style="color: #4a2810;">Auteurs Référencés</p>
+          </div>
+          <div class="col-md-3 col-6 mb-3">
+            <h2 class="fw-bold m-0" style="color: #2b1509;">24h/7</h2>
+            <p class="fw-semibold m-0" style="color: #4a2810;">Livraison & Service</p>
           </div>
         </div>
-      </div>
 
-      <!--======================
-      IMAGE
-      =======================-->
-      <div class="col-lg-6 text-center">
-        <div style="position: relative; display: inline-block;">
-          <div style="
-            position: absolute;
-            width: 450px;
-            height: 450px;
-            background: #d4af37;
-            filter: blur(90px);
-            opacity: 0.25;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-          "></div>
-
-          <img src="{% static 'img/CENTRE5.jpeg' %}" 
-               class="img-fluid position-relative" 
-               style="max-width: 500px; animation: float 5s ease-in-out infinite;" 
-               alt="Aperçu librairie">
-        </div>
       </div>
 
     </div>
@@ -162,6 +185,144 @@
             </div>
         </div>
     </div>
+</section>
+<!--======================
+SECTION CENTRE DE FORMATION
+=======================-->
+<section class="py-5 position-relative" style="
+  background: linear-gradient(180deg, #f8b500 0%, #fceabb 50%, #d4af37 100%);
+  border-top: 3px solid #8b5a2b;
+">
+  <div class="container py-4">
+    
+    <!-- En-tête de section -->
+    <div class="text-center mb-5">
+      <span class="badge px-4 py-2 mb-2 shadow-sm" style="
+        background: #2b1509; 
+        color: #f3e5ab; 
+        font-size: 14px; 
+        letter-spacing: 1px;
+      ">
+        NOS FORMATIONS
+      </span>
+      <h2 class="display-5 fw-bold" style="color: #2b1509; text-transform: uppercase;">
+        Centre de Formation Magnim
+      </h2>
+      <p class="fs-5 fw-semibold" style="color: #4a2810;">
+        Linguistique Kabiyè & Art Culinaire
+      </p>
+      <div style="width: 80px; height: 3px; background: #2b1509; margin: 0 auto;"></div>
+    </div>
+
+    <!-- Image Affiche Formations -->
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-10 text-center">
+        
+        <!-- Cadre d'image -->
+        <div class="p-2 p-md-3 bg-white rounded shadow-lg position-relative" style="
+          border: 3px solid #2b1509;
+        ">
+          <img src="{% static 'img/CENTRE5.jpeg' %}" 
+               alt="Centre de Formation Magnim - Linguistique et Cuisine Kabiyè" 
+               class="img-fluid rounded w-100" 
+               style="max-height: 850px; object-fit: contain;">
+        </div>
+
+        <!-- Badges d'atouts de formation -->
+        <div class="row mt-4 g-2 justify-content-center">
+          <div class="col-6 col-md-3">
+            <div class="p-2 rounded text-center fw-bold shadow-sm" style="background: #2b1509; color: #f3e5ab; border: 1px solid #6b3e11;">
+              Savoir-faire local
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 rounded text-center fw-bold shadow-sm" style="background: #2b1509; color: #f3e5ab; border: 1px solid #6b3e11;">
+              Transmission culturelle
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 rounded text-center fw-bold shadow-sm" style="background: #2b1509; color: #f3e5ab; border: 1px solid #6b3e11;">
+              Approche pratique
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="p-2 rounded text-center fw-bold shadow-sm" style="background: #2b1509; color: #f3e5ab; border: 1px solid #6b3e11;">
+              Engagement communautaire
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+<!--======================
+SECTION AFFICHE & DÉCOUVERTES
+=======================-->
+<section class="py-5 position-relative" style="
+  background: linear-gradient(180deg, #d4af37 0%, #fceabb 50%, #f8b500 100%);
+  border-top: 3px solid #8b5a2b;
+">
+  <div class="container py-4">
+    
+    <!-- En-tête de section -->
+    <div class="text-center mb-5">
+      <span class="badge px-4 py-2 mb-2 shadow-sm" style="
+        background: #2b1509; 
+        color: #f3e5ab; 
+        font-size: 14px; 
+        letter-spacing: 1px;
+      ">
+        NOTRE CATALOGUE EN IMAGE
+      </span>
+      <h2 class="display-5 fw-bold" style="color: #2b1509; text-transform: uppercase;">
+        Librairie Magnim
+      </h2>
+      <p class="fs-5 fw-semibold" style="color: #4a2810;">
+        « Ma culture, ma richesse »
+      </p>
+      <div style="width: 80px; height: 3px; background: #2b1509; margin: 0 auto;"></div>
+    </div>
+
+    <!-- Image Affiche & Détails -->
+    <div class="row align-items-center justify-content-center">
+      <div class="col-lg-10 text-center">
+        
+        <!-- Cadre d'image style Affiche -->
+        <div class="p-2 p-md-3 bg-white rounded shadow-lg position-relative" style="
+          border: 3px solid #2b1509;
+        ">
+          <img src="{% static 'img/CENTRE3.jpeg' %}" 
+               alt="Librairie Magnim - Ma culture, ma richesse" 
+               class="img-fluid rounded w-100" 
+               style="max-height: 850px; object-fit: contain;">
+        </div>
+
+        <!-- Encart Contact & Commandes -->
+        <div class="mt-4 p-3 rounded shadow-sm d-flex flex-wrap align-items-center justify-content-around gap-3" style="
+          background: #2b1509; 
+          color: #f3e5ab; 
+          border: 2px solid #6b3e11;
+        ">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-envelope-fill fs-4 text-warning"></i>
+            <span class="fw-semibold">centremagnim@gmail.com</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-telephone-fill fs-4 text-warning"></i>
+            <span class="fw-bold fs-5">+228 70 76 60 60</span>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-share-fill fs-4 text-warning"></i>
+            <span class="fw-semibold">@centremagnim</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </section>
 <!-- ═══ STATS BANNER ═══════════════════════════════════════════════════════ -->
 <div class="py-3" style="background:var(--kb-gold)">
